@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.verificationScreenController">
+   <left>
+      <BorderPane prefHeight="400.0" prefWidth="283.0" BorderPane.alignment="CENTER">
+         <left>
+            <AnchorPane prefHeight="400.0" prefWidth="20.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
+         </left>
+         <top>
+            <AnchorPane prefHeight="21.0" prefWidth="283.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <AnchorPane prefHeight="18.0" prefWidth="283.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
+         </bottom>
+         <right>
+            <AnchorPane prefHeight="284.0" prefWidth="20.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
+         </right>
+         <center>
+            <ImageView fitHeight="391.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="/TempInvoicesExamples/invoice.png" />
+               </image>
+            </ImageView>
+         </center>
+      </BorderPane>
+   </left>
+   <center>
+      <AnchorPane prefHeight="400.0" prefWidth="314.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="118.0" layoutY="24.0" text="Extracted Data" />
+            <ScrollPane layoutX="-1.0" layoutY="44.0" prefHeight="350.0" prefWidth="318.0">
+               <content>
+                  <AnchorPane prefHeight="445.0" prefWidth="299.0">
+                     <children>
+                        <GridPane layoutX="58.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Invoice Number:" />
+                              <Label text="GL Account:" GridPane.rowIndex="2" />
+                              <Label text="Issue Date:" GridPane.rowIndex="3" />
+                              <Label text="Due Date:" GridPane.rowIndex="4" />
+                              <Label text="Subtotal Due:" GridPane.rowIndex="5" />
+                              <Label text="Tax:" GridPane.rowIndex="6" />
+                              <Label text="Total Due:" GridPane.rowIndex="7" />
+                              <Label text="Vendor:" GridPane.rowIndex="1" />
+                              <TextField fx:id="vendorBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="invoiceNumBox" GridPane.columnIndex="1" />
+                              <TextField fx:id="GLBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="IssueDateBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="DueBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="SubTotalBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="taxBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <TextField fx:id="totalBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <Button fx:id="uploadDataButton" layoutX="116.0" layoutY="346.0" mnemonicParsing="false" onAction="#uploadData" text="Upload Data" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

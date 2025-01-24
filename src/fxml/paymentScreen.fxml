@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paymentScreenController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #E8E8E8;">
+         <children>
+            <Label layoutX="65.0" layoutY="37.0" prefWidth="115.0" text="Amount to Pay:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="65.0" layoutY="91.0" text="Due Date:" />
+            <Label layoutX="65.0" layoutY="128.0" text="Paid to:" />
+            <TextField layoutX="200.0" layoutY="37.0" />
+            <TextField layoutX="150.0" layoutY="87.0" />
+            <TextField layoutX="150.0" layoutY="124.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="230.0" layoutY="25.0" text="Select Payment Option" />
+            <Button layoutX="117.0" layoutY="70.0" mnemonicParsing="false" prefHeight="73.0" prefWidth="79.0" text="Paypal" />
+            <Button layoutX="251.0" layoutY="70.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="79.0" text="Credit" />
+            <Button layoutX="383.0" layoutY="70.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="79.0" text="Cash/ Cheque" textAlignment="CENTER" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
