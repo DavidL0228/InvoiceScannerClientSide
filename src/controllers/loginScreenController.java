@@ -45,7 +45,7 @@ public class loginScreenController {
 
 
         // Send JSON to server
-        JsonObject jsonResponse = client.sendJsonMessage("/login", jsonObject);
+        JsonObject jsonResponse = client.sendJsonMessage(jsonObject);
 
         // Extract status field
         String status = jsonResponse.has("status") ? jsonResponse.get("status").getAsString() : "failure";

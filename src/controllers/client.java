@@ -27,7 +27,7 @@ public class client {
 
 
     //this method now uses the jsonObject to avoid needing to save files
-    public static JsonObject sendJsonMessage(String messageType, JsonObject jsonMessage) throws IOException, InterruptedException {
+    public static JsonObject sendJsonMessage(JsonObject jsonMessage) throws IOException, InterruptedException {
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(SERVER_URL))
