@@ -26,12 +26,12 @@ public class client {
 
 
     //this method now uses the jsonObject to avoid needing to save files
-    public static void sampleRequest(JsonObject jsonObject, String url) throws IOException, InterruptedException {
+    public static String sendJsonMessage(String messageType, JsonObject jsonMessage) throws IOException, InterruptedException {
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(SERVER_URL + url))
+                .uri(URI.create(SERVER_URL))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonMessage.toString()))
                 .build();
 
         // Send the request and receive the response
@@ -39,6 +39,8 @@ public class client {
 
         // Print the server response
         System.out.println("Response: " + response.body());
+
+        return response.body();
     }
 
     // function to send img to server for ocr

@@ -49,7 +49,7 @@ public class verificationScreenController {
 
 
         //send to server
-        client.sampleRequest(jsonObject, "/sample");
+        //client.sampleRequest(jsonObject, "/sample");
 
         //return to main menu
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml"))));

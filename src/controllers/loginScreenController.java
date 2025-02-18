@@ -1,6 +1,7 @@
 package controllers;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,23 +28,41 @@ public class loginScreenController {
     private TextField usernameField;
 
     @FXML
-    void goToMain(ActionEvent event) throws IOException, InterruptedException {
+    void login(ActionEvent event) throws IOException, InterruptedException {
         JsonObject jsonObject = new JsonObject();
 
-        //get data from boxes
-        jsonObject.addProperty("username",usernameField.getText());
-        jsonObject.addProperty("password",passwordField.getText());
+        // Get data from input fields
+        jsonObject.addProperty("type", "LOGIN");  // Specify the message type
 
-        client.sampleRequest(jsonObject, "/sample");
+        // Adds data in a nested json object
+        JsonObject data = new JsonObject();
+        data.addProperty("username", usernameField.getText().trim());
+        data.addProperty("password", passwordField.getText().trim());
+
+        jsonObject.add("data", data);
 
 
+        // Send JSON to server
+        String response = client.sendJsonMessage("/login", jsonObject);
 
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml"))));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        // Parse response
+        JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
+
+        // Extract status field
+        String status = jsonResponse.has("status") ? jsonResponse.get("status").getAsString() : "failure";
+
+        if (status.equals("success")) {
+            System.out.println("Login successful! Redirecting...");
+
+            // Load the next screen (invoice list)
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            String message = jsonResponse.has("message") ? jsonResponse.get("message").getAsString() : "Unknown error";
+            System.out.println("Login failed: " + message);
+        }
     }
-
-
 }
