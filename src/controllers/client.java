@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class client {
 
 
     //this method now uses the jsonObject to avoid needing to save files
-    public static String sendJsonMessage(String messageType, JsonObject jsonMessage) throws IOException, InterruptedException {
+    public static JsonObject sendJsonMessage(String messageType, JsonObject jsonMessage) throws IOException, InterruptedException {
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(SERVER_URL))
@@ -40,7 +41,10 @@ public class client {
         // Print the server response
         System.out.println("Response: " + response.body());
 
-        return response.body();
+        //convert string to json
+        Gson gson = new Gson();
+
+        return gson.fromJson(response.body(), JsonObject.class);
     }
 
     // function to send img to server for ocr

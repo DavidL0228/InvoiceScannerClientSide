@@ -19,13 +19,15 @@ import java.util.Objects;
 public class loginScreenController {
 
     @FXML
-    private Button loginButton;
+    private TextField usernameField;
 
     @FXML
     private PasswordField passwordField;
 
     @FXML
-    private TextField usernameField;
+    private Button loginButton;
+
+
 
     @FXML
     void login(ActionEvent event) throws IOException, InterruptedException {
@@ -43,10 +45,7 @@ public class loginScreenController {
 
 
         // Send JSON to server
-        String response = client.sendJsonMessage("/login", jsonObject);
-
-        // Parse response
-        JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
+        JsonObject jsonResponse = client.sendJsonMessage("/login", jsonObject);
 
         // Extract status field
         String status = jsonResponse.has("status") ? jsonResponse.get("status").getAsString() : "failure";
