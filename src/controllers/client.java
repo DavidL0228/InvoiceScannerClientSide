@@ -1,5 +1,7 @@
 package controllers;
 
+import com.google.gson.JsonObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -23,12 +25,13 @@ public class client {
     }
 
 
-    public static void sampleRequest(String fileName, String url) throws IOException, InterruptedException {
+    //this method now uses the jsonObject to avoid needing to save files
+    public static void sampleRequest(JsonObject jsonObject, String url) throws IOException, InterruptedException {
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(SERVER_URL + url))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofFile(Paths.get("src/" + fileName)))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
                 .build();
 
         // Send the request and receive the response
@@ -38,7 +41,7 @@ public class client {
         System.out.println("Response: " + response.body());
     }
 
-    // function to send simple json to server
+    // function to send img to server for ocr
     public static void makeRequest(HttpClient client, String filePath) throws IOException, InterruptedException {
         File file = new File(filePath);
 

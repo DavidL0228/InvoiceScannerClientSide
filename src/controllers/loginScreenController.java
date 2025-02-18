@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.JsonObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,7 @@ import javafx.scene.Node;
 import java.io.IOException;
 import java.util.Objects;
 
-public class loginScreenController extends guiController {
+public class loginScreenController {
 
     @FXML
     private Button loginButton;
@@ -27,8 +28,13 @@ public class loginScreenController extends guiController {
 
     @FXML
     void goToMain(ActionEvent event) throws IOException, InterruptedException {
+        JsonObject jsonObject = new JsonObject();
 
-        theClient.sampleRequest("/controllers/whatever.json", "/sample");
+        //get data from boxes
+        jsonObject.addProperty("username",usernameField.getText());
+        jsonObject.addProperty("password",passwordField.getText());
+
+        client.sampleRequest(jsonObject, "/sample");
 
 
 
@@ -37,11 +43,6 @@ public class loginScreenController extends guiController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-
-    public void initialize() {
-        theClient = new client();
     }
 
 

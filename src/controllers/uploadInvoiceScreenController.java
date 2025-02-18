@@ -21,7 +21,7 @@ public class uploadInvoiceScreenController {
     private Button uploadButton;
 
     @FXML
-    void goBackToMain(ActionEvent event) throws IOException {
+    void goBackToMain(ActionEvent event) throws IOException, InterruptedException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml"))));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
@@ -30,7 +30,7 @@ public class uploadInvoiceScreenController {
     }
 
     @FXML
-    void uploadNewInvoice(ActionEvent event)  throws IOException {
+    void uploadNewInvoice(ActionEvent event) throws IOException, InterruptedException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/verificationScreen.fxml"))));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
