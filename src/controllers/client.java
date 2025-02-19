@@ -77,13 +77,9 @@ public class client {
         System.arraycopy(fileContent, 0, requestBody, bodyBuilder.length(), fileContent.length);
         System.arraycopy(endBoundary.getBytes(), 0, requestBody, bodyBuilder.length() + fileContent.length, endBoundary.length());
 
-        sendRequest(client, "/upload", boundary, requestBody);
-    }
-
-    public static void sendRequest(HttpClient client, String url, String boundary, byte[] requestBody) throws IOException, InterruptedException {
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(SERVER_URL + url))
+                .uri(URI.create(SERVER_URL + "/upload"))
                 .header("Content-Type", "multipart/form-data; boundary=" + boundary)
                 .POST(HttpRequest.BodyPublishers.ofByteArray(requestBody)) // Send the multipart form data as byte array
                 .build();
