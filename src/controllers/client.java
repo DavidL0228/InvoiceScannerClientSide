@@ -48,7 +48,7 @@ public class client {
     }
 
     // function to send img to server for ocr
-    public static void makeRequest(HttpClient client, String filePath) throws IOException, InterruptedException {
+    public static void makeRequest(String filePath) throws IOException, InterruptedException {
         File file = new File(filePath);
 
         if (!file.exists()) {
@@ -85,7 +85,7 @@ public class client {
                 .build();
 
         // Send the request and receive the response
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = clientAddr.send(request, HttpResponse.BodyHandlers.ofString());
 
         // Print the server response (OCR result or error)
         System.out.println("Response: " + response.body());
