@@ -30,7 +30,7 @@ public class client {
     public static JsonObject sendJsonMessage(JsonObject jsonMessage) throws IOException, InterruptedException {
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(SERVER_URL))
+                .uri(URI.create(SERVER_URL+"/message"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonMessage.toString()))
                 .build();
