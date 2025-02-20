@@ -29,6 +29,9 @@
             <TableColumn prefWidth="90.40000915527344" text="Amount Due" />
             <TableColumn prefWidth="125.59998779296876" text="Due Date" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </center>
 </BorderPane>
