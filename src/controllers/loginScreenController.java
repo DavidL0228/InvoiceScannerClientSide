@@ -53,8 +53,8 @@ public class loginScreenController {
         if (status.equals("success")) {
             System.out.println("Login successful! Redirecting...");
 
-            // Load the next screen (invoice list)
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml")));
+            // Load the next screen (home screen)
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
