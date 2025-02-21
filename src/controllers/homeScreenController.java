@@ -32,6 +32,9 @@ public class homeScreenController {
     private Button viewInvoicesButton;
 
     @FXML
+    private Button manageRolesButton;
+
+    @FXML
     void addPaymentButtonClicked(ActionEvent event) {
 
         // load payment screen
@@ -73,6 +76,11 @@ public class homeScreenController {
 
         // load invoice list screen
         loadScreen(event, "/fxml/invoiceListScreen.fxml");
+    }
+
+    @FXML
+    void manageRolesButtonClicked(ActionEvent event){
+        loadScreen(event, "/fxml/manageRolesScreen.fxml");
     }
 
     void loadScreen(ActionEvent event, String page){
