@@ -28,11 +28,7 @@
             <AnchorPane prefHeight="284.0" prefWidth="20.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
          </right>
          <center>
-            <ImageView fitHeight="391.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <image>
-                  <Image url="/TempInvoicesExamples/invoice.png" />
-               </image>
-            </ImageView>
+
          </center>
       </BorderPane>
    </left>
