@@ -2,7 +2,6 @@ package controllers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,46 +23,62 @@ public class invoiceListScreenController {
     private VBox invoiceListContainer; // VBox inside ScrollPane for invoices
 
     public void initialize() {
-        loadInvoicesFromJson();
+        fetchInvoicesFromServer(1, 10, "issueDate", "desc");  // Default parameters
     }
 
-    private void loadInvoicesFromJson() {
+    private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder) {
         try {
-            // Mock JSON response from the server (Replace with actual API call later)
-            String jsonResponse = "["
-                    + "{ \"invoiceId\": \"12345\", \"issueDate\": \"2024-03-08\", \"dueDate\": \"2024-04-08\", \"sender\": \"Company XYZ\", \"amountDue\": 500.00 },"
-                    + "{ \"invoiceId\": \"67890\", \"issueDate\": \"2024-03-01\", \"dueDate\": \"2024-04-01\", \"sender\": \"Company ABC\", \"amountDue\": 350.50 }"
-                    + "]";
+            // Create request JSON object
+            JsonObject requestJson = new JsonObject();
+            requestJson.addProperty("type", "GET_INVOICES");
 
-            // Parse JSON string into a JsonArray
-            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
-            List<controllers.Invoice> invoices = new ArrayList<>();
+            // Create "data" object with pagination & sorting params
+            JsonObject data = new JsonObject();
+            data.addProperty("pageNumber", pageNumber);
+            data.addProperty("pageSize", pageSize);
+            data.addProperty("sortBy", sortBy);
+            data.addProperty("sortOrder", sortOrder);
+            requestJson.add("data", data);
 
-            // Convert JSON to Invoice objects
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
-                controllers.Invoice invoice = new controllers.Invoice(
-                        jsonInvoice.get("invoiceId").getAsString(),
-                        jsonInvoice.get("issueDate").getAsString(),
-                        jsonInvoice.get("dueDate").getAsString(),
-                        jsonInvoice.get("sender").getAsString(),
-                        jsonInvoice.get("amountDue").getAsDouble()
-                );
-                invoices.add(invoice);
-            }
+            // Send request to server
+            JsonObject responseJson = client.sendJsonMessage(requestJson);
 
-            // Load invoices into the VBox
-            for (controllers.Invoice invoice : invoices) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
-                Parent invoiceItem = loader.load();
+            // Ensure the response contains an array of invoices
+            if (responseJson.has("invoices")) {
+                JsonArray jsonArray = responseJson.getAsJsonArray("invoices");
+                List<controllers.Invoice> invoices = new ArrayList<>();
 
-                invoiceItemController controller = loader.getController();
-                controller.setInvoiceData(invoice);
+                // Convert JSON to Invoice objects
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
+                    controllers.Invoice invoice = new controllers.Invoice(
+                            jsonInvoice.get("invoiceId").getAsString(),
+                            jsonInvoice.get("issueDate").getAsString(),
+                            jsonInvoice.get("dueDate").getAsString(),
+                            jsonInvoice.get("sender").getAsString(),
+                            jsonInvoice.get("amountDue").getAsDouble()
+                    );
+                    invoices.add(invoice);
+                }
 
-                invoiceListContainer.getChildren().add(invoiceItem);
+                // Populate invoices into the VBox
+                invoiceListContainer.getChildren().clear();  // Clear previous items
+                for (controllers.Invoice invoice : invoices) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
+                    Parent invoiceItem = loader.load();
+
+                    invoiceItemController controller = loader.getController();
+                    controller.setInvoiceData(invoice);
+
+                    invoiceListContainer.getChildren().add(invoiceItem);
+                }
+            } else {
+                System.out.println("No invoices found in response.");
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
