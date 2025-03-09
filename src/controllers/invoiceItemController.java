@@ -26,6 +26,6 @@ public class invoiceItemController {
         issueDateLabel.setText("Issue Date: " + invoice.getIssueDate());
         dueDateLabel.setText("Due Date: " + invoice.getDueDate());
         senderLabel.setText("Sender: " + invoice.getSender());
-        amountLabel.setText("Total: $" + invoice.getAmountDue());
+        amountLabel.setText("Total Due: $" + invoice.getAmountDue());
     }
 }

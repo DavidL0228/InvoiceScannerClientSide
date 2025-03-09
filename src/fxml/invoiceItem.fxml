@@ -11,13 +11,13 @@
 
     <VBox layoutX="10.0" layoutY="10.0" spacing="5.0">
         <HBox spacing="15.0">
-            <Label fx:id="invoiceNumberLabel" text="Invoice #: 12345" style="-fx-font-weight: bold;"/>
-            <Label fx:id="amountLabel" text="Total: $0.00"/>
+            <Label fx:id="invoiceNumberLabel" text="Invoice #: -----" style="-fx-font-weight: bold;"/>
+            <Label fx:id="amountLabel" text="Total Due: -----"/>
         </HBox>
         <HBox spacing="15.0">
-            <Label fx:id="issueDateLabel" text="Issue Date: 2024-03-08"/>
-            <Label fx:id="dueDateLabel" text="Due Date: 2024-04-08"/>
+            <Label fx:id="issueDateLabel" text="Issue Date: ------"/>
+            <Label fx:id="dueDateLabel" text="Due Date: -------"/>
         </HBox>
-        <Label fx:id="senderLabel" text="Sender: Company XYZ"/>
+        <Label fx:id="senderLabel" text="Sender: ------"/>
     </VBox>
 </AnchorPane>
