@@ -2,16 +2,18 @@ package controllers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,74 @@ public class invoiceListScreenController {
     @FXML
     private VBox invoiceListContainer; // VBox inside ScrollPane for invoices
 
+    @FXML
+    private ComboBox<String> sortByComboBox;
+
+    @FXML
+    private ComboBox<String> sortOrderComboBox;
+
+    @FXML
+    private Button backButton;
+
+    private String selectedSortBy = "issue_date"; // Default sort by issue date
+    private String selectedSortOrder = "desc"; // Default descending order
+
     public void initialize() {
-        fetchInvoicesFromServer(1, 10, "issue_date", "desc");  // Default parameters
+        setupSortingOptions();
+        fetchInvoicesFromServer(1, 10, selectedSortBy, selectedSortOrder);
+    }
+
+    private void setupSortingOptions() {
+        // Define sorting criteria
+        ObservableList<String> sortByOptions = FXCollections.observableArrayList(
+                "Sender", "Due Date", "Issue Date", "Total Due", "Status", "Payment Date"
+        );
+        sortByComboBox.setItems(sortByOptions);
+        sortByComboBox.setValue("Issue Date"); // Default selection
+
+        // Define sorting order
+        ObservableList<String> sortOrderOptions = FXCollections.observableArrayList("Ascending", "Descending");
+        sortOrderComboBox.setItems(sortOrderOptions);
+        sortOrderComboBox.setValue("Descending"); // Default selection
+
+        // Listeners for sorting changes
+        sortByComboBox.setOnAction(event -> updateSortBy());
+        sortOrderComboBox.setOnAction(event -> updateSortOrder());
+    }
+
+    private void updateSortBy() {
+        String selected = sortByComboBox.getValue();
+        switch (selected) {
+            case "Sender":
+                selectedSortBy = "sender";
+                break;
+            case "Due Date":
+                selectedSortBy = "due_date";
+                break;
+            case "Issue Date":
+                selectedSortBy = "issue_date";
+                break;
+            case "Total Due":
+                selectedSortBy = "total";
+                break;
+            case "Status":
+                selectedSortBy = "status";
+                break;
+            case "Payment Date":
+                selectedSortBy = "date_paid";
+                break;
+            default:
+                selectedSortBy = "issue_date";
+        }
+    }
+
+    private void updateSortOrder() {
+        selectedSortOrder = sortOrderComboBox.getValue().equals("Ascending") ? "asc" : "desc";
+    }
+
+    @FXML
+    private void applySorting() {
+        fetchInvoicesFromServer(1, 10, selectedSortBy, selectedSortOrder);
     }
 
     private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder) {
@@ -46,12 +114,12 @@ public class invoiceListScreenController {
             // Ensure the response contains an array of invoices
             if (responseJson.has("invoices")) {
                 JsonArray jsonArray = responseJson.getAsJsonArray("invoices");
-                List<controllers.Invoice> invoices = new ArrayList<>();
+                List<Invoice> invoices = new ArrayList<>();
 
                 // Convert JSON to Invoice objects
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
-                    controllers.Invoice invoice = new controllers.Invoice(
+                    Invoice invoice = new Invoice(
                             jsonInvoice.get("invoiceId").getAsString(),
                             jsonInvoice.get("issueDate").getAsString(),
                             jsonInvoice.get("paymentDate").getAsString(),
@@ -64,8 +132,8 @@ public class invoiceListScreenController {
                 }
 
                 // Populate invoices into the VBox
-                invoiceListContainer.getChildren().clear();  // Clear previous items
-                for (controllers.Invoice invoice : invoices) {
+                invoiceListContainer.getChildren().clear();
+                for (Invoice invoice : invoices) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
                     Parent invoiceItem = loader.load();
 
@@ -77,10 +145,8 @@ public class invoiceListScreenController {
             } else {
                 System.out.println("No invoices found in response.");
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 
