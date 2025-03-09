@@ -23,7 +23,7 @@ public class invoiceListScreenController {
     private VBox invoiceListContainer; // VBox inside ScrollPane for invoices
 
     public void initialize() {
-        fetchInvoicesFromServer(1, 10, "issueDate", "desc");  // Default parameters
+        fetchInvoicesFromServer(1, 10, "issue_date", "desc");  // Default parameters
     }
 
     private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder) {
@@ -54,9 +54,9 @@ public class invoiceListScreenController {
                     controllers.Invoice invoice = new controllers.Invoice(
                             jsonInvoice.get("invoiceId").getAsString(),
                             jsonInvoice.get("issueDate").getAsString(),
-                            jsonInvoice.get("dueDate").getAsString(),
+                            jsonInvoice.get("paymentDate").getAsString(),
                             jsonInvoice.get("sender").getAsString(),
-                            jsonInvoice.get("amountDue").getAsDouble()
+                            jsonInvoice.get("totalAmount").getAsDouble()
                     );
                     invoices.add(invoice);
                 }
