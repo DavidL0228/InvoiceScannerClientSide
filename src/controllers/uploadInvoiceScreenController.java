@@ -24,7 +24,7 @@ public class uploadInvoiceScreenController {
 
     @FXML
     void goBackToMain(ActionEvent event) throws IOException, InterruptedException {
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml"))));
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml"))));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
