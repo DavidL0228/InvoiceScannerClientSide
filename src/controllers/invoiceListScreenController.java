@@ -56,7 +56,9 @@ public class invoiceListScreenController {
                             jsonInvoice.get("issueDate").getAsString(),
                             jsonInvoice.get("paymentDate").getAsString(),
                             jsonInvoice.get("sender").getAsString(),
-                            jsonInvoice.get("totalAmount").getAsDouble()
+                            jsonInvoice.get("totalAmount").getAsDouble(),
+                            jsonInvoice.get("status").getAsString(),
+                            jsonInvoice.get("paymentDate").getAsString()
                     );
                     invoices.add(invoice);
                 }
