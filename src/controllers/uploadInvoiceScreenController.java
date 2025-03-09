@@ -48,6 +48,7 @@ public class uploadInvoiceScreenController {
         System.out.println("File selected: " + file);
 
         // send file to server
+        client.sendFile(file.getAbsolutePath());
 
         // load verification screen
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/verificationScreen.fxml"))));

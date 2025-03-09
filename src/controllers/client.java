@@ -48,7 +48,7 @@ public class client {
     }
 
     // function to send img to server for ocr
-    public static void makeRequest(String filePath) throws IOException, InterruptedException {
+    public static void sendFile(String filePath) throws IOException, InterruptedException {
         File file = new File(filePath);
 
         if (!file.exists()) {
