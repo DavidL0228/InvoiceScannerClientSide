@@ -7,6 +7,6 @@ public class guiController {
 
     protected static client theClient;
 
-    private static List<invoice> displayInvoices = new ArrayList<>();
+    //private static List<invoice> displayInvoices = new ArrayList<>();
 
 }

@@ -5,23 +5,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
    <top>
       <HBox prefHeight="87.0" prefWidth="600.0" style="-fx-background-color: #BEBEBE;" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane prefHeight="87.0" prefWidth="835.0">
                <children>
-                  <Button fx:id="backButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="72.0" prefWidth="74.0" text="Back" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="backButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack"
+                          prefHeight="72.0" prefWidth="74.0" text="Back" textAlignment="CENTER" wrapText="true"/>
                </children>
             </AnchorPane>
-         </children></HBox>
+         </children>
+      </HBox>
    </top>
    <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-        </content>
+      <ScrollPane prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0">
+               <VBox fx:id="invoiceListContainer" layoutY="10.0" spacing="10.0" prefWidth="580.0" style="-fx-padding: 10;">
+               </VBox>
+            </AnchorPane>
+         </content>
       </ScrollPane>
    </center>
 </BorderPane>
