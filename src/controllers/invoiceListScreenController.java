@@ -35,6 +35,9 @@ public class invoiceListScreenController {
     private Button backButton;
 
     @FXML
+    private ComboBox<Integer> pageSizeComboBox;
+
+    @FXML
     private Button prevPageButton;
 
     @FXML
@@ -45,12 +48,13 @@ public class invoiceListScreenController {
 
     private int currentPage = 1;
     private int totalPages = 5;
-    private final int pageSize = 5; // Number of invoices per page
+    private int pageSize = 10; // Default Number of invoices per page
     private String selectedSortBy = "issue_date"; // Default sort by issue date
     private String selectedSortOrder = "desc"; // Default descending order
 
     public void initialize() {
         setupSortingOptions();
+        setupPageSizeOptions();
         fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
     }
 
@@ -70,6 +74,19 @@ public class invoiceListScreenController {
         // Listeners for sorting changes
         sortByComboBox.setOnAction(event -> updateSortBy());
         sortOrderComboBox.setOnAction(event -> updateSortOrder());
+    }
+
+    private void setupPageSizeOptions() {
+        ObservableList<Integer> pageSizeOptions = FXCollections.observableArrayList(5, 10, 20, 50);
+        pageSizeComboBox.setItems(pageSizeOptions);
+        pageSizeComboBox.setValue(10); // Default page size
+
+        // Update page size when selection changes
+        pageSizeComboBox.setOnAction(event -> {
+            pageSize = pageSizeComboBox.getValue();
+            currentPage = 1; // Reset to first page
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+        });
     }
 
     private void updateSortBy() {
@@ -143,6 +160,10 @@ public class invoiceListScreenController {
                             jsonInvoice.get("paymentDate").getAsString()
                     );
                     invoices.add(invoice);
+                }
+
+                if (responseJson.has("totalPages")) {
+                    totalPages = responseJson.get("totalPages").getAsInt();
                 }
 
                 totalPages = responseJson.get("totalPages").getAsInt();

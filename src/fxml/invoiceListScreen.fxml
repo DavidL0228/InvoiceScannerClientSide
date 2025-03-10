@@ -16,12 +16,17 @@
          <HBox spacing="10.0" style="-fx-background-color: #BEBEBE; -fx-padding: 5;">
             <Button fx:id="backButton" text="Back" onAction="#goBack"/>
          </HBox>
-         <!-- Sorting UI -->
+         <!-- Sorting & Page Size UI -->
          <HBox spacing="10.0">
             <Label text="Sort by:"/>
             <ComboBox fx:id="sortByComboBox" prefWidth="150.0"/>
             <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0"/>
             <Button text="Apply Sort" onAction="#applySorting"/>
+         </HBox>
+         <!-- Page Size Selection -->
+         <HBox spacing="10.0">
+            <Label text="Invoices per page:"/>
+            <ComboBox fx:id="pageSizeComboBox" prefWidth="100.0"/>
          </HBox>
       </VBox>
    </top>
