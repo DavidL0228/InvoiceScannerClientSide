@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -33,12 +34,24 @@ public class invoiceListScreenController {
     @FXML
     private Button backButton;
 
+    @FXML
+    private Button prevPageButton;
+
+    @FXML
+    private Button nextPageButton;
+
+    @FXML
+    private Label pageLabel;
+
+    private int currentPage = 1;
+    private int totalPages = 5;
+    private final int pageSize = 5; // Number of invoices per page
     private String selectedSortBy = "issue_date"; // Default sort by issue date
     private String selectedSortOrder = "desc"; // Default descending order
 
     public void initialize() {
         setupSortingOptions();
-        fetchInvoicesFromServer(1, 10, selectedSortBy, selectedSortOrder);
+        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
     }
 
     private void setupSortingOptions() {
@@ -63,7 +76,7 @@ public class invoiceListScreenController {
         String selected = sortByComboBox.getValue();
         switch (selected) {
             case "Sender":
-                selectedSortBy = "sender";
+                selectedSortBy = "company";
                 break;
             case "Due Date":
                 selectedSortBy = "due_date";
@@ -91,7 +104,8 @@ public class invoiceListScreenController {
 
     @FXML
     private void applySorting() {
-        fetchInvoicesFromServer(1, 10, selectedSortBy, selectedSortOrder);
+        currentPage = 1;
+        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
     }
 
     private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder) {
@@ -131,6 +145,11 @@ public class invoiceListScreenController {
                     invoices.add(invoice);
                 }
 
+                totalPages = responseJson.get("totalPages").getAsInt();
+                updatePageControls();
+                pageLabel.setText("Page " + currentPage + " of " + totalPages);
+
+
                 // Populate invoices into the VBox
                 invoiceListContainer.getChildren().clear();
                 for (Invoice invoice : invoices) {
@@ -149,6 +168,28 @@ public class invoiceListScreenController {
             e.printStackTrace();
         }
     }
+
+    private void updatePageControls() {
+        prevPageButton.setDisable(currentPage == 1);
+        nextPageButton.setDisable(currentPage >= totalPages);
+    }
+
+    @FXML
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+        }
+    }
+
+    @FXML
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+        }
+    }
+
 
     @FXML
     void goBack(ActionEvent event) throws IOException {

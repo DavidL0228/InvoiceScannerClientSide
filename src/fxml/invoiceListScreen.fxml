@@ -8,29 +8,39 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
 
    <top>
       <VBox spacing="5.0" style="-fx-padding: 10;">
          <HBox spacing="10.0" style="-fx-background-color: #BEBEBE; -fx-padding: 5;">
-            <Button fx:id="backButton" onAction="#goBack" text="Back" />
+            <Button fx:id="backButton" text="Back" onAction="#goBack"/>
          </HBox>
          <!-- Sorting UI -->
          <HBox spacing="10.0">
-            <Label text="Sort by:" />
-            <ComboBox fx:id="sortByComboBox" prefWidth="150.0" />
-            <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0" />
-            <Button onAction="#applySorting" text="Apply Sort" />
+            <Label text="Sort by:"/>
+            <ComboBox fx:id="sortByComboBox" prefWidth="150.0"/>
+            <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0"/>
+            <Button text="Apply Sort" onAction="#applySorting"/>
          </HBox>
       </VBox>
    </top>
 
    <center>
-      <ScrollPane fitToHeight="false" fitToWidth="true" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <ScrollPane fitToWidth="true" fitToHeight="false" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="invoiceListContainer" prefWidth="580.0" spacing="10.0" style="-fx-padding: 10;">
+            <VBox fx:id="invoiceListContainer" spacing="10.0" prefWidth="580.0" style="-fx-padding: 10;">
             </VBox>
          </content>
       </ScrollPane>
    </center>
+
+   <!-- Pagination Controls -->
+   <bottom>
+      <HBox spacing="10.0" alignment="CENTER" style="-fx-padding: 10;">
+         <Button fx:id="prevPageButton" text="Previous" onAction="#previousPage"/>
+         <Label fx:id="pageLabel" text="Page 1"/>
+         <Button fx:id="nextPageButton" text="Next" onAction="#nextPage"/>
+      </HBox>
+   </bottom>
 </BorderPane>
