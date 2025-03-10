@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
@@ -27,7 +28,8 @@ public class loginScreenController {
     @FXML
     private Button loginButton;
 
-
+    @FXML
+    private Text errorText;
 
     @FXML
     void login(ActionEvent event) throws IOException, InterruptedException {
@@ -62,6 +64,7 @@ public class loginScreenController {
         } else {
             String message = jsonResponse.has("message") ? jsonResponse.get("message").getAsString() : "Unknown error";
             System.out.println("Login failed: " + message);
+            errorText.setVisible(true);
         }
     }
 }
