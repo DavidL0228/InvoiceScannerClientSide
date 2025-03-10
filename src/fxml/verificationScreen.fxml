@@ -29,6 +29,8 @@
          </right>
          <center>
 
+             <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+
          </center>
       </BorderPane>
    </left>

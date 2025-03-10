@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import com.google.gson.JsonObject;
 
 public class uploadInvoiceScreenController {
 
@@ -48,10 +49,16 @@ public class uploadInvoiceScreenController {
         System.out.println("File selected: " + file);
 
         // send file to server
-        client.sendFile(file.getAbsolutePath());
+        JsonObject data = client.sendFile(file.getAbsolutePath());
 
         // load verification screen
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/verificationScreen.fxml"))));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/verificationScreen.fxml"));
+        Parent root = loader.load();
+
+        verificationScreenController controller = loader.getController();
+
+        controller.setData(data, file.getAbsolutePath());
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

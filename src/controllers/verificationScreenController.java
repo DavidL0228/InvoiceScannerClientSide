@@ -9,12 +9,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 public class verificationScreenController {
+
+    @FXML
+    private ImageView imageView;
 
     @FXML
     private TextField DueBox;
@@ -74,4 +80,39 @@ public class verificationScreenController {
         return jsonObject;
     }
 
+    public void setData(JsonObject jsonObject, String filePath) {
+
+        File file = new File(filePath);
+        if (file.exists()) {
+            String fileUrl = file.toURI().toString(); // Convert to URI and then to String
+            Image image = new Image(fileUrl);
+            imageView.setImage(image);
+        }
+
+        if (jsonObject.has("due")){
+            DueBox.setText(jsonObject.get("due").getAsString());
+        }
+        if (jsonObject.has("GL")){
+            GLBox.setText(jsonObject.get("GL").getAsString());
+        }
+        if (jsonObject.has("date")){
+            IssueDateBox.setText(jsonObject.get("eDate").getAsString());
+        }
+        if (jsonObject.has("subTotal")){
+            SubTotalBox.setText(jsonObject.get("subTotal").getAsString());
+        }
+        if (jsonObject.has("invoice_num")){
+            invoiceNumBox.setText(jsonObject.get("invoice_num").getAsString());
+        }
+        if (jsonObject.has("tax")){
+            taxBox.setText(jsonObject.get("tax").getAsString());
+        }
+        if (jsonObject.has("total")){
+            totalBox.setText(jsonObject.get("total").getAsString());
+        }
+        if (jsonObject.has("vendor")){
+            vendorBox.setText(jsonObject.get("vendor").getAsString());
+        }
+
+    }
 }

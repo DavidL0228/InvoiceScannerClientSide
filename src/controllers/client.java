@@ -48,12 +48,12 @@ public class client {
     }
 
     // function to send img to server for ocr
-    public static void sendFile(String filePath) throws IOException, InterruptedException {
+    public static JsonObject sendFile(String filePath) throws IOException, InterruptedException {
         File file = new File(filePath);
 
         if (!file.exists()) {
             System.err.println("File does not exist: " + filePath);
-            return;
+            return null;
         }
 
         // Generate a boundary string for multipart
@@ -89,5 +89,10 @@ public class client {
 
         // Print the server response (OCR result or error)
         System.out.println("Response: " + response.body());
+
+        //get jsonObject from response
+        Gson gson = new Gson();
+        return gson.fromJson(response.body(), JsonObject.class);
+
     }
 }
