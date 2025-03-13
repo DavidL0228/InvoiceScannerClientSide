@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -14,25 +13,9 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.verificationScreenController">
    <left>
-      <BorderPane prefHeight="400.0" prefWidth="283.0" BorderPane.alignment="CENTER">
-         <left>
-            <AnchorPane prefHeight="400.0" prefWidth="20.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
-         </left>
-         <top>
-            <AnchorPane prefHeight="21.0" prefWidth="283.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
-         </top>
-         <bottom>
-            <AnchorPane prefHeight="18.0" prefWidth="283.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
-         </bottom>
-         <right>
-            <AnchorPane prefHeight="284.0" prefWidth="20.0" style="-fx-background-color: #E8E8E8;" BorderPane.alignment="CENTER" />
-         </right>
-         <center>
-
-             <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-
-         </center>
-      </BorderPane>
+      <AnchorPane prefHeight="400.0" prefWidth="283.0" BorderPane.alignment="CENTER">
+          <ImageView fx:id="imageView" fitHeight="400.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" />
+      </AnchorPane>
    </left>
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="314.0" BorderPane.alignment="CENTER">
