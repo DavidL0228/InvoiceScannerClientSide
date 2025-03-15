@@ -21,13 +21,18 @@
             <Label text="Sort by:"/>
             <ComboBox fx:id="sortByComboBox" prefWidth="150.0"/>
             <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0"/>
-            <Button text="Apply Sort" onAction="#applySorting"/>
+         </HBox>
+         <!-- Status Filter Selection -->
+         <HBox spacing="10.0">
+            <Label text="Filter by Status:"/>
+            <ComboBox fx:id="statusFilterComboBox" prefWidth="200.0"/>
          </HBox>
          <!-- Page Size Selection -->
          <HBox spacing="10.0">
             <Label text="Invoices per page:"/>
             <ComboBox fx:id="pageSizeComboBox" prefWidth="100.0"/>
          </HBox>
+
       </VBox>
    </top>
 

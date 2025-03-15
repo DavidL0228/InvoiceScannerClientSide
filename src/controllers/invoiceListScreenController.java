@@ -46,16 +46,21 @@ public class invoiceListScreenController {
     @FXML
     private Label pageLabel;
 
+    @FXML
+    private ComboBox<String> statusFilterComboBox;
+
     private int currentPage = 1;
     private int totalPages = 5;
     private int pageSize = 10; // Default Number of invoices per page
     private String selectedSortBy = "issue_date"; // Default sort by issue date
     private String selectedSortOrder = "desc"; // Default descending order
+    private String selectedStatusFilter = "Unpaid Invoices"; // Default filter
 
     public void initialize() {
         setupSortingOptions();
         setupPageSizeOptions();
-        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+        setupStatusFilter();
+        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
     }
 
     private void setupSortingOptions() {
@@ -72,8 +77,17 @@ public class invoiceListScreenController {
         sortOrderComboBox.setValue("Descending"); // Default selection
 
         // Listeners for sorting changes
-        sortByComboBox.setOnAction(event -> updateSortBy());
-        sortOrderComboBox.setOnAction(event -> updateSortOrder());
+        sortByComboBox.setOnAction(event -> {
+            updateSortBy();
+            currentPage = 1; // Reset to first page
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+        });
+        sortOrderComboBox.setOnAction(event -> {
+            updateSortOrder();
+            currentPage = 1; // Reset to first page
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+
+        });
     }
 
     private void setupPageSizeOptions() {
@@ -85,7 +99,22 @@ public class invoiceListScreenController {
         pageSizeComboBox.setOnAction(event -> {
             pageSize = pageSizeComboBox.getValue();
             currentPage = 1; // Reset to first page
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+        });
+    }
+
+    private void setupStatusFilter() {
+        ObservableList<String> statusOptions = FXCollections.observableArrayList(
+                "Paid Invoices", "Waiting for Approval", "Waiting for Payment", "Unpaid Invoices", "All Invoices"
+        );
+        statusFilterComboBox.setItems(statusOptions);
+        statusFilterComboBox.setValue("Unpaid Invoices"); // Default selection
+
+        // Update filter when selection changes
+        statusFilterComboBox.setOnAction(event -> {
+            selectedStatusFilter = statusFilterComboBox.getValue();
+            currentPage = 1; // Reset to first page
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
         });
     }
 
@@ -122,10 +151,10 @@ public class invoiceListScreenController {
     @FXML
     private void applySorting() {
         currentPage = 1;
-        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
     }
 
-    private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder) {
+    private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder, String statusFilter) {
         try {
             // Create request JSON object
             JsonObject requestJson = new JsonObject();
@@ -137,6 +166,7 @@ public class invoiceListScreenController {
             data.addProperty("pageSize", pageSize);
             data.addProperty("sortBy", sortBy);
             data.addProperty("sortOrder", sortOrder);
+            data.addProperty("statusFilter", statusFilter);
             requestJson.add("data", data);
 
             // Send request to server
@@ -199,7 +229,7 @@ public class invoiceListScreenController {
     private void nextPage() {
         if (currentPage < totalPages) {
             currentPage++;
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
         }
     }
 
@@ -207,7 +237,7 @@ public class invoiceListScreenController {
     private void previousPage() {
         if (currentPage > 1) {
             currentPage--;
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder);
+            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
         }
     }
 
