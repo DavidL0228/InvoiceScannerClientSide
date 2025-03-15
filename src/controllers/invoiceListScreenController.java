@@ -49,6 +49,7 @@ public class invoiceListScreenController {
     @FXML
     private ComboBox<String> statusFilterComboBox;
 
+
     private int currentPage = 1;
     private int totalPages = 5;
     private int pageSize = 10; // Default Number of invoices per page

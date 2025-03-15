@@ -42,7 +42,7 @@ public class invoiceItemController {
         dueDateLabel.setText("Due Date: " + invoice.getDueDate());
         senderLabel.setText("Sender: " + invoice.getSender());
         amountLabel.setText("Total: $" + invoice.getTotalAmount());
-        statusLabel.setText("Status: " + invoice.getStatus());
+        statusLabel.setText(invoice.getStatus());
 
         // If status is "Paid", show payment date and disable the button
         if ("Paid".equalsIgnoreCase(invoice.getStatus())) {
@@ -52,6 +52,22 @@ public class invoiceItemController {
         } else {
             paymentDateLabel.setVisible(false);
             payButton.setDisable(false);
+        }
+
+        // Set colour of status label
+        switch (invoice.getStatus().toLowerCase()) {
+            case "paid":
+                statusLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;");
+                break;
+            case "awaiting approval":
+                statusLabel.setStyle("-fx-text-fill: #FFC107; -fx-font-weight: bold;");
+                break;
+            case "awaiting payment":
+            case "unpaid":
+                statusLabel.setStyle("-fx-text-fill: #FF5722; -fx-font-weight: bold;");
+                break;
+            default:
+                statusLabel.setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
         }
     }
 
