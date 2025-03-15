@@ -1,9 +1,16 @@
 package controllers;
 
 import com.google.gson.JsonObject;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class invoiceItemController {
@@ -30,12 +37,13 @@ public class invoiceItemController {
     private Label paymentDateLabel;
 
     @FXML
-    private Button payButton;
+    private Button payApproveButton, viewEditButton;
 
-    private Invoice invoice;
+    private Invoice currentInvoice;
 
     public void setInvoiceData(Invoice invoice) {
-        this.invoice = invoice;
+        this.currentInvoice = invoice;
+
 
         invoiceNumberLabel.setText("Invoice #: " + invoice.getInvoiceId());
         issueDateLabel.setText("Issue Date: " + invoice.getIssueDate());
@@ -48,10 +56,10 @@ public class invoiceItemController {
         if ("Paid".equalsIgnoreCase(invoice.getStatus())) {
             paymentDateLabel.setText("Paid on: " + invoice.getPaymentDate());
             paymentDateLabel.setVisible(true);
-            payButton.setDisable(true); // Disable button for paid invoices
+            payApproveButton.setDisable(true); // Disable button for paid invoices
         } else {
             paymentDateLabel.setVisible(false);
-            payButton.setDisable(false);
+            payApproveButton.setDisable(false);
         }
 
         // Set colour of status label
@@ -69,34 +77,41 @@ public class invoiceItemController {
             default:
                 statusLabel.setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
         }
+
+        // Change button behavior based on status
+        if (invoice.getStatus().equalsIgnoreCase("awaiting Approval")) {
+            payApproveButton.setText("Approve");
+        } else {
+            payApproveButton.setText("Pay");
+        }
     }
 
 
-    // Temp function, need to add actual payment screen
+    // Handles invoice action
     @FXML
-    private void payInvoice() {
-        try {
-            JsonObject requestJson = new JsonObject();
+    private void handleInvoiceAction(ActionEvent event) {
+        JsonObject requestJson = new JsonObject();
+
+        if (currentInvoice.getStatus().equalsIgnoreCase("awaiting Approval")) {
+            requestJson.addProperty("type", "APPROVE_INVOICE");
+        } else {
             requestJson.addProperty("type", "PAY_INVOICE");
+        }
 
-            JsonObject data = new JsonObject();
-            data.addProperty("invoiceId", invoice.getInvoiceId());
-            requestJson.add("data", data);
+        JsonObject data = new JsonObject();
+        data.addProperty("invoiceId", currentInvoice.getInvoiceId());
+        requestJson.add("data", data);
 
-            // Send payment request to the server
+        try {
             JsonObject responseJson = client.sendJsonMessage(requestJson);
-
-            // Check response and update UI
-            if (responseJson.has("status") && responseJson.get("status").getAsString().equals("success")) {
-                statusLabel.setText("Status: Paid");
-                paymentDateLabel.setText("Paid on: " + responseJson.get("paymentDate").getAsString());
-                paymentDateLabel.setVisible(true);
-                payButton.setDisable(true); // Disable button after payment
-            } else {
-                System.out.println("Payment failed: " + responseJson.get("message").getAsString());
-            }
+            System.out.println("Server Response: " + responseJson);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void viewEditInvoice(ActionEvent event) throws IOException {
+
     }
 }
