@@ -2,35 +2,60 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<VBox prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.paymentScreenController">
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paymentScreenController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #E8E8E8;">
+
+      <!-- Back Button -->
+      <Button fx:id="backButton" text="Back" onAction="#goBack" />
+
+      <!-- Table to Display Selected Invoices -->
+      <TableView fx:id="invoiceTable" prefHeight="200.0" prefWidth="580.0">
+         <columns>
+            <TableColumn fx:id="invoiceIdColumn" text="Invoice ID" prefWidth="100.0">
+               <cellValueFactory><PropertyValueFactory property="invoiceId"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="emailColumn" text="Email (Paid To)" prefWidth="180.0">
+               <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="subtotalColumn" text="Subtotal" prefWidth="100.0">
+               <cellValueFactory><PropertyValueFactory property="subtotal"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="taxColumn" text="Tax" prefWidth="80.0">
+               <cellValueFactory><PropertyValueFactory property="tax"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="totalColumn" text="Total Amount" prefWidth="120.0">
+               <cellValueFactory><PropertyValueFactory property="totalAmount"/></cellValueFactory>
+            </TableColumn>
+         </columns>
+      </TableView>
+
+      <!-- Payment Summary -->
+      <AnchorPane prefHeight="100.0" prefWidth="600.0">
          <children>
-            <Label layoutX="65.0" layoutY="37.0" prefWidth="115.0" text="Amount to Pay:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label layoutX="65.0" layoutY="91.0" text="Due Date:" />
-            <Label layoutX="65.0" layoutY="128.0" text="Paid to:" />
-            <TextField layoutX="200.0" layoutY="37.0" />
-            <TextField layoutX="150.0" layoutY="87.0" />
-            <TextField layoutX="150.0" layoutY="124.0" />
+            <Label layoutX="65.0" layoutY="30.0" text="Total to Pay:"/>
+            <TextField fx:id="totalAmountField" layoutX="150.0" layoutY="25.0" editable="false"/>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+
+      <!-- Payment Method Selection -->
+      <AnchorPane prefHeight="150.0" prefWidth="600.0">
          <children>
-            <Label layoutX="230.0" layoutY="25.0" text="Select Payment Option" />
-            <Button layoutX="117.0" layoutY="70.0" mnemonicParsing="false" prefHeight="73.0" prefWidth="79.0" text="Paypal" />
-            <Button layoutX="251.0" layoutY="70.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="79.0" text="Credit" />
-            <Button layoutX="383.0" layoutY="70.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="79.0" text="Cash/ Cheque" textAlignment="CENTER" wrapText="true" />
+            <Label layoutX="230.0" layoutY="20.0" text="Select Payment Option"/>
+            <Button fx:id="paypalButton" layoutX="80.0" layoutY="60.0" prefHeight="50.0" prefWidth="100.0" text="PayPal" onAction="#payWithPayPal"/>
+            <Button fx:id="creditCardButton" layoutX="250.0" layoutY="60.0" prefHeight="50.0" prefWidth="100.0" text="Credit Card" onAction="#payWithCreditCard"/>
+            <Button fx:id="chequeButton" layoutX="420.0" layoutY="60.0" prefHeight="50.0" prefWidth="100.0" text="Cheque" onAction="#payWithCheque"/>
          </children>
       </AnchorPane>
+
    </children>
 </VBox>

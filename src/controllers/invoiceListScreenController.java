@@ -197,7 +197,10 @@ public class invoiceListScreenController {
                     totalPages = responseJson.get("totalPages").getAsInt();
                 }
 
-                totalPages = responseJson.get("totalPages").getAsInt();
+                if (responseJson.has("totalPages")) {
+                    totalPages = responseJson.get("totalPages").getAsInt();
+                }
+
                 updatePageControls();
                 pageLabel.setText("Page " + currentPage + " of " + totalPages);
 
@@ -210,6 +213,7 @@ public class invoiceListScreenController {
 
                     invoiceItemController controller = loader.getController();
                     controller.setInvoiceData(invoice);
+
 
                     invoiceListContainer.getChildren().add(invoiceItem);
                 }
@@ -250,5 +254,22 @@ public class invoiceListScreenController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void openPaymentScreen(Invoice invoice, ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
+            Parent root = loader.load();
+
+            paymentScreenController controller = loader.getController();
+            controller.setSelectedInvoices(List.of(invoice)); // Send only the selected invoice
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

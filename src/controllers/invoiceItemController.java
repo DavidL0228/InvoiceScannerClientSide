@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class invoiceItemController {
 
@@ -84,19 +85,41 @@ public class invoiceItemController {
         } else {
             payApproveButton.setText("Pay");
         }
+
     }
 
 
-    // Handles invoice action
     @FXML
     private void handleInvoiceAction(ActionEvent event) {
-        JsonObject requestJson = new JsonObject();
-
         if (currentInvoice.getStatus().equalsIgnoreCase("awaiting Approval")) {
-            requestJson.addProperty("type", "APPROVE_INVOICE");
+            approveInvoice(); // Keeps "Approve" functionality unchanged
         } else {
-            requestJson.addProperty("type", "PAY_INVOICE");
+            openPaymentScreen(event);
         }
+    }
+
+    // Opens the payment screen and passes selected invoice
+    private void openPaymentScreen(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
+            Parent root = loader.load();
+
+            paymentScreenController controller = loader.getController();
+            controller.setSelectedInvoices(List.of(currentInvoice)); // Send only this invoice
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Handles approval action separately
+    private void approveInvoice() {
+        JsonObject requestJson = new JsonObject();
+        requestJson.addProperty("type", "APPROVE_INVOICE");
 
         JsonObject data = new JsonObject();
         data.addProperty("invoiceId", currentInvoice.getInvoiceId());
