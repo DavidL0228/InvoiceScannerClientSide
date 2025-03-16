@@ -96,7 +96,7 @@ public class verificationScreenController {
             GLBox.setText(jsonObject.get("GL").getAsString());
         }
         if (jsonObject.has("date")){
-            IssueDateBox.setText(jsonObject.get("eDate").getAsString());
+            IssueDateBox.setText(jsonObject.get("date").getAsString());
         }
         if (jsonObject.has("subTotal")){
             SubTotalBox.setText(jsonObject.get("subTotal").getAsString());
