@@ -1,7 +1,7 @@
 package controllers;
 
 public class Invoice {
-    private final String invoiceId;
+    private final String internalId;
     private final String invoiceNumber;
     private final String company;
     private final double subtotal;
@@ -15,9 +15,9 @@ public class Invoice {
     private final String status;
     private final String description;
 
-    public Invoice(String invoiceId, String invoiceNumber, String company, double subtotal, double tax, double totalAmount,
+    public Invoice(String internalId, String invoiceNumber, String company, double subtotal, double tax, double totalAmount,
                    String glAccount, String email, String issueDate, String dueDate, String datePaid, String status, String description) {
-        this.invoiceId = invoiceId;
+        this.internalId = internalId;
         this.invoiceNumber = invoiceNumber;
         this.company = company;
         this.subtotal = subtotal;
@@ -32,7 +32,7 @@ public class Invoice {
         this.description = description;
     }
 
-    public String getInvoiceId() { return invoiceId; }
+    public String getInternalId() { return internalId; }
     public String getInvoiceNumber() { return invoiceNumber; }
     public String getCompany() { return company; }
     public double getSubtotal() { return subtotal; }

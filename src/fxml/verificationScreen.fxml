@@ -46,30 +46,44 @@
                                         <RowConstraints vgrow="SOMETIMES" />
                                         <RowConstraints vgrow="SOMETIMES" />
                                         <RowConstraints vgrow="SOMETIMES" />
-                              <RowConstraints />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label text="Invoice Number:" />
-                                        <Label text="Vendor:" GridPane.rowIndex="1" />
-                                        <Label text="Email:" GridPane.rowIndex="2" />
-                                        <Label text="GL Account:" GridPane.rowIndex="3" />
-                                        <Label text="Issue Date:" GridPane.rowIndex="4" />
-                                        <Label text="Due Date:" GridPane.rowIndex="5" />
-                                        <Label text="Subtotal Due:" GridPane.rowIndex="6" />
-                                        <Label text="Tax:" GridPane.rowIndex="7" />
-                                        <Label text="Total Due:" GridPane.rowIndex="8" />
+                                        <!-- Internal ID (Non-editable) -->
+                                        <Label text="Internal ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                                        <TextField fx:id="internalIdBox" editable="false" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-                                           <TextField fx:id="invoiceNumBox" GridPane.columnIndex="1" />
-                                        <TextField fx:id="vendorBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <TextField fx:id="emailBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                        <TextField fx:id="GLBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                        <TextField fx:id="IssueDateBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                        <TextField fx:id="DueBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                        <TextField fx:id="SubTotalBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                        <TextField fx:id="taxBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                        <TextField fx:id="totalBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                        <!-- Existing fields -->
+                                        <Label text="Invoice Number:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                        <TextField fx:id="invoiceNumBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Label text="Vendor:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                        <TextField fx:id="vendorBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <Label text="Email:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                        <TextField fx:id="emailBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                        <Label text="GL Account:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                        <TextField fx:id="GLBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                        <Label text="Issue Date:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                        <TextField fx:id="IssueDateBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                                        <Label text="Due Date:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                        <TextField fx:id="DueBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                                        <Label text="Subtotal Due:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                                        <TextField fx:id="SubTotalBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+                                        <Label text="Tax:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+                                        <TextField fx:id="taxBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+                                        <Label text="Total Due:" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+                                        <TextField fx:id="totalBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                                     </children>
                                 </GridPane>
+
                             </AnchorPane>
                         </content>
                     </ScrollPane>

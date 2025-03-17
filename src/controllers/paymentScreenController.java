@@ -50,7 +50,7 @@ public class paymentScreenController {
     private ObservableList<Invoice> selectedInvoices = FXCollections.observableArrayList();
 
     public void initialize() {
-        invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("invoiceId"));
+        invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("invoiceNumber"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         subtotalColumn.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         taxColumn.setCellValueFactory(new PropertyValueFactory<>("tax"));
@@ -99,7 +99,7 @@ public class paymentScreenController {
 
         JsonArray invoiceIds = new JsonArray();
         for (Invoice invoice : selectedInvoices) {
-            invoiceIds.add(invoice.getInvoiceId());
+            invoiceIds.add(invoice.getInternalId());
         }
         data.add("invoiceIds", invoiceIds);
 

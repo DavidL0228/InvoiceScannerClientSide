@@ -46,7 +46,7 @@ public class invoiceItemController {
         this.currentInvoice = invoice;
 
 
-        invoiceNumberLabel.setText("Invoice #: " + invoice.getInvoiceId());
+        invoiceNumberLabel.setText("Invoice #: " + invoice.getInvoiceNumber());
         issueDateLabel.setText("Issue Date: " + invoice.getIssueDate());
         dueDateLabel.setText("Due Date: " + invoice.getDueDate());
         senderLabel.setText("Sender: " + invoice.getCompany());
@@ -122,7 +122,7 @@ public class invoiceItemController {
         requestJson.addProperty("type", "APPROVE_INVOICE");
 
         JsonObject data = new JsonObject();
-        data.addProperty("invoiceId", currentInvoice.getInvoiceId());
+        data.addProperty("internalID", currentInvoice.getInternalId());
         requestJson.add("data", data);
 
         try {

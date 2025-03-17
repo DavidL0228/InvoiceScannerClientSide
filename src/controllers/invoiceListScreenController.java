@@ -182,7 +182,7 @@ public class invoiceListScreenController {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
                     Invoice invoice = new Invoice(
-                            jsonInvoice.get("invoice_id").getAsString(),
+                            jsonInvoice.get("internal_id").getAsString(),
                             jsonInvoice.get("invoice_number").getAsString(),
                             jsonInvoice.get("company").getAsString(),
                             jsonInvoice.get("subtotal").getAsDouble(),
