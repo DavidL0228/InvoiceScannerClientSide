@@ -1,31 +1,207 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dataScreenController">
-   <left>
-      <AnchorPane prefHeight="400.0" prefWidth="298.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="1114.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.dataScreenController">
+   <top>
+      <GridPane style="-fx-background-color: #C9C9C9;" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <ImageView fitHeight="193.0" fitWidth="263.0" layoutX="18.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../TempInvoicesExamples/pie_quickstart.png" />
-               </image>
-            </ImageView>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" text="Back" />
          </children>
-      </AnchorPane>
-   </left>
-   <right>
-      <AnchorPane prefHeight="400.0" prefWidth="314.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </GridPane>
+   </top>
+   <center>
+      <GridPane alignment="CENTER" prefWidth="906.0" BorderPane.alignment="TOP_CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="835.4000244140625" minWidth="10.0" prefWidth="812.2000732421875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="550.5999755859375" minWidth="10.0" prefWidth="301.7999267578125" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="458.3999877929688" minHeight="349.5999633789063" prefHeight="457.6" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <Label layoutX="26.0" layoutY="57.0" text="Monthly Spending:" />
-            <Label layoutX="26.0" layoutY="101.0" text="Average Cost:" />
-            <Label layoutX="26.0" layoutY="140.0" text="Most Bought Item:" />
+            <TabPane fx:id="tabPane" prefWidth="712.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="2">
+              <tabs>
+                <Tab fx:id="monthTab" text="Month">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #C9C9C9;">
+                           <children>
+                              <LineChart fx:id="monthLineChart" animated="false" minWidth="588.0" prefHeight="424.0" prefWidth="808.0" title=" ">
+                                 <xAxis>
+                                    <CategoryAxis animated="false" label="Date" prefWidth="532.0" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis animated="false" label="Amount $" side="LEFT" />
+                                 </yAxis>
+                                 <padding>
+                                    <Insets right="10.0" top="20.0" />
+                                 </padding>
+                              </LineChart>
+                              <Button fx:id="previousMonthButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#previousMonthButtonClicked" text="&lt;" />
+                              <Button fx:id="nextMonthButton" layoutX="48.0" layoutY="14.0" mnemonicParsing="false" onAction="#nextMonthButtonClicked" text="&gt;" />
+                              <Button fx:id="currentMonthButton" layoutX="85.0" layoutY="14.0" mnemonicParsing="false" onAction="#currentMonthButtonClicked" text="Current" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab fx:id="yearTab" text="Year">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #C9C9C9;">
+                           <children>
+                              <LineChart fx:id="yearLineChart" animated="false" minWidth="588.0" prefHeight="424.0" prefWidth="808.0" title=" ">
+                                 <xAxis>
+                                    <CategoryAxis animated="false" label="Month" prefWidth="532.0" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis animated="false" label="Amount $" side="LEFT" />
+                                 </yAxis>
+                                 <padding>
+                                    <Insets right="10.0" top="20.0" />
+                                 </padding>
+                              </LineChart>
+                              <Button fx:id="previousYearButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#previousYearButtonClicked" text="&lt;" />
+                              <Button fx:id="nextYearButton" layoutX="48.0" layoutY="14.0" mnemonicParsing="false" onAction="#nextYearButtonClicked" text="&gt;" />
+                              <Button fx:id="currentYearButton" layoutX="85.0" layoutY="14.0" mnemonicParsing="false" onAction="#currentYearButtonClicked" text="Current" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="allTimeTab" text="All Time">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #C9C9C9;">
+                           <children>
+                              <LineChart fx:id="allTimeLineChart" animated="false" minWidth="588.0" prefHeight="424.0" prefWidth="808.0" title="All Time">
+                                 <xAxis>
+                                    <CategoryAxis animated="false" label="Year" prefWidth="532.0" side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis animated="false" label="Amount $" side="LEFT" />
+                                 </yAxis>
+                                 <padding>
+                                    <Insets right="10.0" top="20.0" />
+                                 </padding>
+                              </LineChart>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+              </tabs>
+               <padding>
+                  <Insets left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </TabPane>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Spending Data">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <children>
+                  <SplitMenuButton fx:id="monthMenu" mnemonicParsing="false" text="Month">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="JANUARY" />
+                      <MenuItem mnemonicParsing="false" text="FEBRUARY" />
+                        <MenuItem mnemonicParsing="false" text="MARCH" />
+                        <MenuItem mnemonicParsing="false" text="APRIL" />
+                        <MenuItem mnemonicParsing="false" text="MAY" />
+                        <MenuItem mnemonicParsing="false" text="JUNE" />
+                        <MenuItem mnemonicParsing="false" text="JULY" />
+                        <MenuItem mnemonicParsing="false" text="AUGUST" />
+                        <MenuItem mnemonicParsing="false" text="SEPTEMBER" />
+                        <MenuItem mnemonicParsing="false" text="OCTOBER" />
+                        <MenuItem mnemonicParsing="false" text="NOVEMBER" />
+                        <MenuItem mnemonicParsing="false" text="DECEMBER" />
+                    </items>
+                  </SplitMenuButton>
+                  <SplitMenuButton fx:id="yearMenu" mnemonicParsing="false" text="Year">
+                  </SplitMenuButton>
+                  <Button fx:id="applyButton" mnemonicParsing="false" onAction="#applyButtonClicked" text="Apply" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" top="10.0" />
+               </padding>
+            </HBox>
+            <GridPane style="-fx-background-color: #C9C9C9;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Monthly Spending" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" />
+                  <Text fx:id="yearText" strokeType="OUTSIDE" strokeWidth="0.0" text="2025" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Yearly Spending" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                  <Text fx:id="monthlySpendingText" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets right="8.0" />
+                     </GridPane.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Per Month" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="8.0" />
+                     </GridPane.margin>
+                  </Text>
+                  <Line endX="100.0" opacity="0.41" startX="-100.0" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                  <Text fx:id="yearlySpendingText" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets right="8.0" top="10.0" />
+                     </GridPane.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Per Year" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets left="8.0" top="10.0" />
+                     </GridPane.margin>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets right="10.0" top="8.0" />
+               </GridPane.margin>
+            </GridPane>
          </children>
-      </AnchorPane>
-   </right>
+      </GridPane>
+   </center>
 </BorderPane>

@@ -52,13 +52,13 @@ public class homeScreenController {
     void dataButtonClicked(ActionEvent event) {
 
         // load data screen
-        //loadScreen(event, "/fxml/dataScreen.fxml");
+        loadScreen(event, "/fxml/dataScreen.fxml");
     }
 
     @FXML
     void logoutButtonClicked(ActionEvent event) {
 
-        //logout
+        // logout
 
         // load login screen
         loadScreen(event, "/fxml/loginScreen.fxml");
@@ -80,6 +80,8 @@ public class homeScreenController {
 
     @FXML
     void manageRolesButtonClicked(ActionEvent event){
+
+        // load manage roles screen
         loadScreen(event, "/fxml/manageRolesScreen.fxml");
     }
 
