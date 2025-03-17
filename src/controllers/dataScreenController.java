@@ -104,9 +104,6 @@ public class dataScreenController {
         else if(selectedTab.equals("Year"))
             setYearLineChart(yearMenuSelection);
 
-        year = yearMenuSelection;
-        month = monthMenuSelection;
-
         if(yearText.toString().equals(String.valueOf(yearMenuSelection)))
             return;
 
@@ -216,6 +213,9 @@ public class dataScreenController {
     }
 
     private void setMonthLineChart(int yr, String m){
+
+        year = yr;
+        month = m;
 
         monthLineChart.setTitle(m + " " + yr);
 
