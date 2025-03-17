@@ -55,6 +55,9 @@ public class verificationScreenController {
 
     @FXML private StackPane imageStackPane;
 
+    private String storedFileName;
+
+
     @FXML
     public void initialize() {
         // Bind the ImageView dimensions to dynamically respond to the container size
@@ -63,39 +66,60 @@ public class verificationScreenController {
     }
 
     @FXML
-    void uploadData(ActionEvent event) throws IOException, InterruptedException {
-        JsonObject jsonObject = getJsonObject();
+    void uploadData(ActionEvent event) {
+        JsonObject invoiceData = new JsonObject();
 
+        // Retrieve and format the data from text fields
+        invoiceData.addProperty("invoiceNum", invoiceNumBox.getText());
+        invoiceData.addProperty("vendor", vendorBox.getText());
+        invoiceData.addProperty("email", emailBox.getText());
+        invoiceData.addProperty("GL", GLBox.getText());
+        invoiceData.addProperty("issueDate", IssueDateBox.getText());
+        invoiceData.addProperty("due", DueBox.getText());
+        invoiceData.addProperty("subTotal", SubTotalBox.getText().isEmpty() ? "NULL" : SubTotalBox.getText());
+        invoiceData.addProperty("tax", taxBox.getText().isEmpty() ? "NULL" : taxBox.getText());
+        invoiceData.addProperty("total", totalBox.getText());
+        invoiceData.addProperty("datePaid", "NULL"); // Initially NULL
+        invoiceData.addProperty("status", "awaiting approval");
+        invoiceData.addProperty("description", "NULL"); // Default description
 
-        //send to server
-        //client.sampleRequest(jsonObject, "/sample");
+        // Add tempFilename
+        invoiceData.addProperty("tempFilename", storedFileName);
 
-        //return to main menu
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml"))));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
+        try {
+            // Send JSON to server (type ADD_INVOICE)
+            JsonObject requestJson = new JsonObject();
+            requestJson.addProperty("type", "ADD_INVOICE");
+            requestJson.add("data", invoiceData);
 
-    private JsonObject getJsonObject() {
-        JsonObject jsonObject = new JsonObject();
+            JsonObject response = client.sendJsonMessage(requestJson);
 
-        //get data from boxes and add to json object
-        jsonObject.addProperty("due",DueBox.getText());
-        jsonObject.addProperty("GL",GLBox.getText());
-        jsonObject.addProperty("issueDate",IssueDateBox.getText());
-        jsonObject.addProperty("subTotal",SubTotalBox.getText());
-        jsonObject.addProperty("invoiceNum",invoiceNumBox.getText());
-        jsonObject.addProperty("tax",taxBox.getText());
-        jsonObject.addProperty("total",totalBox.getText());
-        jsonObject.addProperty("vendor",vendorBox.getText());
-        return jsonObject;
+            if (response.get("status").getAsString().equals("success")) {
+                System.out.println("Invoice added successfully.");
+
+                // Redirect to invoice list screen
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml")));
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                System.out.println("Error: " + response.get("message").getAsString());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setData(JsonObject jsonObject, String filePath) {
 
         File file = new File(filePath);
+        String fileName = file.getName();
+
+        storedFileName = fileName;
+
+
         try {
             if (file.exists()) {
                 String fileUrl = file.toURI().toString();
