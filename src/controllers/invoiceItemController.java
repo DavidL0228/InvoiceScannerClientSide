@@ -135,6 +135,15 @@ public class invoiceItemController {
 
     @FXML
     private void viewEditInvoice(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editScreen.fxml"));
+        Parent root = loader.load();
 
+        editScreenController controller = loader.getController();
+        controller.loadInvoiceData(currentInvoice);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

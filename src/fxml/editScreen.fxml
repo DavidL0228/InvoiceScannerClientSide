@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.editScreenController">
+
+    <center>
+        <HBox prefHeight="100.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+
+            <!-- Left: Image Display -->
+            <StackPane fx:id="imageStackPane" prefHeight="400.0" prefWidth="187.0" style="-fx-background-color: #aaaa;" HBox.hgrow="ALWAYS">
+                <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
+            </StackPane>
+
+            <!-- Right: Centered Extracted Data -->
+            <StackPane HBox.hgrow="ALWAYS">
+                <VBox alignment="CENTER" spacing="10.0">
+                    <Label text="Extracted Data" />
+
+                    <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                        <content>
+                            <AnchorPane>
+                                <GridPane layoutX="10.0" layoutY="10.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="ALWAYS" />
+                                        <ColumnConstraints hgrow="ALWAYS" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <!-- Internal ID (Non-editable) -->
+                                        <Label text="Internal ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                                        <TextField fx:id="internalIdBox" editable="false" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                                        <!-- Existing fields -->
+                                        <Label text="Invoice Number:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                        <TextField fx:id="invoiceNumBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Label text="Vendor:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                        <TextField fx:id="vendorBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <Label text="Email:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                        <TextField fx:id="emailBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                        <Label text="GL Account:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                        <TextField fx:id="GLBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                        <Label text="Issue Date:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                        <TextField fx:id="IssueDateBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                                        <Label text="Due Date:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                        <TextField fx:id="DueBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                                        <Label text="Subtotal Due:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                                        <TextField fx:id="SubTotalBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+                                        <Label text="Tax:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+                                        <TextField fx:id="taxBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+                                        <Label text="Total Due:" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+                                        <TextField fx:id="totalBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                    </children>
+                                </GridPane>
+
+                            </AnchorPane>
+                        </content>
+                    </ScrollPane>
+
+                    <!-- Upload Button Below Form -->
+                    <Button fx:id="submitEditButton" onAction="#uploadData" text="Submit Edit" />
+                </VBox>
+            </StackPane>
+        </HBox>
+    </center>
+</BorderPane>
