@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,6 +52,10 @@ public class uploadInvoiceScreenController {
         // send file to server
         JsonObject data = client.sendFile(file.getAbsolutePath());
 
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        double width = currentStage.getWidth();
+        double height = currentStage.getHeight();
+
         // load verification screen
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/verificationScreen.fxml"));
         Parent root = loader.load();
@@ -60,7 +65,7 @@ public class uploadInvoiceScreenController {
         controller.setData(data, file.getAbsolutePath());
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.show();
     }

@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -50,6 +51,18 @@ public class verificationScreenController {
     private TextField vendorBox;
 
     @FXML
+    private TextField emailBox;
+
+    @FXML private StackPane imageStackPane;
+
+    @FXML
+    public void initialize() {
+        // Bind the ImageView dimensions to dynamically respond to the container size
+        imageView.fitWidthProperty().bind(imageStackPane.widthProperty().subtract(20));
+        imageView.fitHeightProperty().bind(imageStackPane.heightProperty().subtract(20));
+    }
+
+    @FXML
     void uploadData(ActionEvent event) throws IOException, InterruptedException {
         JsonObject jsonObject = getJsonObject();
 
@@ -83,10 +96,21 @@ public class verificationScreenController {
     public void setData(JsonObject jsonObject, String filePath) {
 
         File file = new File(filePath);
-        if (file.exists()) {
-            String fileUrl = file.toURI().toString(); // Convert to URI and then to String
-            Image image = new Image(fileUrl);
-            imageView.setImage(image);
+        try {
+            if (file.exists()) {
+                String fileUrl = file.toURI().toString();
+                System.out.println("File URL: " + fileUrl); // Debugging
+
+                Image newImage = new Image(fileUrl);
+                imageView.setImage(null); // Force refresh
+                imageView.setImage(newImage);
+                System.out.println("Image successfully loaded!");
+            } else {
+                System.out.println("Error: Image file does not exist!");
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+            e.printStackTrace(); // Debugging
         }
 
         if (jsonObject.has("due")){
@@ -112,6 +136,9 @@ public class verificationScreenController {
         }
         if (jsonObject.has("vendor")){
             vendorBox.setText(jsonObject.get("vendor").getAsString());
+        }
+        if (jsonObject.has("email")){
+            emailBox.setText(jsonObject.get("email").getAsString());
         }
 
     }

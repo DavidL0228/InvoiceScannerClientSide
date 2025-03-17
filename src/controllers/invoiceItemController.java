@@ -49,13 +49,13 @@ public class invoiceItemController {
         invoiceNumberLabel.setText("Invoice #: " + invoice.getInvoiceId());
         issueDateLabel.setText("Issue Date: " + invoice.getIssueDate());
         dueDateLabel.setText("Due Date: " + invoice.getDueDate());
-        senderLabel.setText("Sender: " + invoice.getSender());
+        senderLabel.setText("Sender: " + invoice.getCompany());
         amountLabel.setText("Total: $" + invoice.getTotalAmount());
         statusLabel.setText(invoice.getStatus());
 
         // If status is "Paid", show payment date and disable the button
         if ("Paid".equalsIgnoreCase(invoice.getStatus())) {
-            paymentDateLabel.setText("Paid on: " + invoice.getPaymentDate());
+            paymentDateLabel.setText("Paid on: " + invoice.getDatePaid());
             paymentDateLabel.setVisible(true);
             payApproveButton.setDisable(true); // Disable button for paid invoices
         } else {

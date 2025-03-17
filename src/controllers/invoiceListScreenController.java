@@ -182,13 +182,19 @@ public class invoiceListScreenController {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
                     Invoice invoice = new Invoice(
-                            jsonInvoice.get("invoiceId").getAsString(),
-                            jsonInvoice.get("issueDate").getAsString(),
-                            jsonInvoice.get("paymentDate").getAsString(),
-                            jsonInvoice.get("sender").getAsString(),
-                            jsonInvoice.get("totalAmount").getAsDouble(),
+                            jsonInvoice.get("invoice_id").getAsString(),
+                            jsonInvoice.get("invoice_number").getAsString(),
+                            jsonInvoice.get("company").getAsString(),
+                            jsonInvoice.get("subtotal").getAsDouble(),
+                            jsonInvoice.get("tax").getAsDouble(),
+                            jsonInvoice.get("total").getAsDouble(),
+                            jsonInvoice.get("gl_account").getAsString(),
+                            jsonInvoice.get("email").getAsString(),
+                            jsonInvoice.get("issue_date").getAsString(),
+                            jsonInvoice.get("due_date").getAsString(),
+                            jsonInvoice.get("date_paid").isJsonNull() ? null : jsonInvoice.get("date_paid").getAsString(),
                             jsonInvoice.get("status").getAsString(),
-                            jsonInvoice.get("paymentDate").getAsString()
+                            jsonInvoice.get("description").getAsString()
                     );
                     invoices.add(invoice);
                 }
