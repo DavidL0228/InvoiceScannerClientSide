@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.invoiceListScreenController">
 
    <top>
       <VBox spacing="5.0" style="-fx-padding: 10;">
          <HBox spacing="10.0" style="-fx-background-color: #BEBEBE; -fx-padding: 5;">
             <Button fx:id="backButton" text="Back" onAction="#goBack"/>
+            <Button fx:id="toggleViewButton" text="Switch to Table View" onAction="#toggleView"/>
          </HBox>
+
          <!-- Sorting & Page Size UI -->
          <HBox spacing="10.0">
             <Label text="Sort by:"/>
             <ComboBox fx:id="sortByComboBox" prefWidth="150.0"/>
             <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0"/>
          </HBox>
+
          <!-- Status Filter Selection -->
          <HBox spacing="10.0">
             <Label text="Filter by Status:"/>
             <ComboBox fx:id="statusFilterComboBox" prefWidth="200.0"/>
          </HBox>
+
          <!-- Page Size Selection -->
          <HBox spacing="10.0">
             <Label text="Invoices per page:"/>
@@ -37,12 +39,28 @@
    </top>
 
    <center>
-      <ScrollPane fitToWidth="true" fitToHeight="false" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <content>
-            <VBox fx:id="invoiceListContainer" spacing="10.0" prefWidth="580.0" style="-fx-padding: 10;">
-            </VBox>
-         </content>
-      </ScrollPane>
+      <StackPane fx:id="viewStackPane">
+         <!-- Original ScrollPane/List View -->
+         <ScrollPane fx:id="invoiceScrollPane" fitToWidth="true" fitToHeight="true">
+            <content>
+               <VBox fx:id="invoiceListContainer" spacing="10.0" prefWidth="580.0" style="-fx-padding: 10;">
+                  <!-- Dynamically loaded invoice items -->
+               </VBox>
+            </content>
+         </ScrollPane>
+
+         <!-- New TableView (initially hidden) -->
+         <TableView fx:id="invoiceTableView" visible="false">
+            <columns>
+               <TableColumn fx:id="invoiceIdColumn" text="Invoice ID"/>
+               <TableColumn fx:id="vendorColumn" text="Vendor"/>
+               <TableColumn fx:id="subtotalColumn" text="Subtotal"/>
+               <TableColumn fx:id="taxColumn" text="Tax"/>
+               <TableColumn fx:id="totalColumn" text="Total"/>
+               <TableColumn fx:id="statusColumn" text="Status"/>
+            </columns>
+         </TableView>
+      </StackPane>
    </center>
 
    <!-- Pagination Controls -->

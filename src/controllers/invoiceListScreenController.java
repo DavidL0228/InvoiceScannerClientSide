@@ -2,6 +2,8 @@ package controllers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,9 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -47,8 +48,26 @@ public class invoiceListScreenController {
     private Label pageLabel;
 
     @FXML
+    private Button toggleViewButton;
+
+    @FXML
+    private StackPane viewStackPane;
+
+    @FXML
+    private ScrollPane invoiceScrollPane;
+
+    @FXML
+    private TableView<Invoice> invoiceTableView;
+
+    @FXML
     private ComboBox<String> statusFilterComboBox;
 
+    @FXML
+    private TableColumn<Invoice, String> invoiceIdColumn, vendorColumn, statusColumn;
+    @FXML
+    private TableColumn<Invoice, Double> subtotalColumn, taxColumn, totalColumn;
+
+    private boolean isTableView = false; // Default view is VBox/List
 
     private int currentPage = 1;
     private int totalPages = 5;
@@ -61,7 +80,32 @@ public class invoiceListScreenController {
         setupSortingOptions();
         setupPageSizeOptions();
         setupStatusFilter();
+        initializeTableView();
         fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+    }
+
+    // Initialize columns for the TableView
+    private void initializeTableView() {
+        invoiceIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getInternalId()));
+        vendorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCompany()));
+        subtotalColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getSubtotal()).asObject());
+        taxColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getTax()).asObject());
+        totalColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getTotalAmount()).asObject());
+        statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
+    }
+
+    @FXML
+    private void toggleView(ActionEvent event) {
+        isTableView = !isTableView;
+
+        invoiceTableView.setVisible(isTableView);
+        invoiceScrollPane.setVisible(!isTableView);
+
+        if (isTableView) {
+            toggleViewButton.setText("Switch to List View");
+        } else {
+            toggleViewButton.setText("Switch to Table View");
+        }
     }
 
     private void setupSortingOptions() {
@@ -203,32 +247,37 @@ public class invoiceListScreenController {
                     totalPages = responseJson.get("totalPages").getAsInt();
                 }
 
-                if (responseJson.has("totalPages")) {
-                    totalPages = responseJson.get("totalPages").getAsInt();
-                }
 
                 updatePageControls();
                 pageLabel.setText("Page " + currentPage + " of " + totalPages);
 
 
-                // Populate invoices into the VBox
-                invoiceListContainer.getChildren().clear();
-                for (Invoice invoice : invoices) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
-                    Parent invoiceItem = loader.load();
-
-                    invoiceItemController controller = loader.getController();
-                    controller.setInvoiceData(invoice);
-
-
-                    invoiceListContainer.getChildren().add(invoiceItem);
-                }
+                updateInvoiceListView(invoices);
+                updateInvoiceTableView(invoices);
             } else {
                 System.out.println("No invoices found in response.");
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    // Populate list VBox
+    private void updateInvoiceListView(List<Invoice> invoices) throws IOException {
+        invoiceListContainer.getChildren().clear();
+        for (Invoice invoice : invoices) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
+            Parent invoiceItem = loader.load();
+            invoiceItemController controller = loader.getController();
+            controller.setInvoiceData(invoice);
+            invoiceListContainer.getChildren().add(invoiceItem);
+        }
+    }
+
+    // Populate TableView
+    private void updateInvoiceTableView(List<Invoice> invoices) {
+        ObservableList<Invoice> tableData = FXCollections.observableArrayList(invoices);
+        invoiceTableView.setItems(tableData);
     }
 
     private void updatePageControls() {
