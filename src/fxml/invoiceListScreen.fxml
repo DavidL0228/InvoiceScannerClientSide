@@ -16,11 +16,16 @@
             <Button fx:id="toggleViewButton" text="Switch to Table View" onAction="#toggleView"/>
          </HBox>
 
+
          <!-- Sorting & Page Size UI -->
          <HBox spacing="10.0">
             <Label text="Sort by:"/>
             <ComboBox fx:id="sortByComboBox" prefWidth="150.0"/>
             <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0"/>
+            <!-- Align "Print Selected" button to the right -->
+            <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
+               <Button fx:id="printSelectedButton" text="Print Selected" onAction="#printSelectedInvoices"/>
+            </HBox>
          </HBox>
 
          <!-- Status Filter Selection -->
@@ -40,24 +45,23 @@
 
    <center>
       <StackPane fx:id="viewStackPane">
-         <!-- Original ScrollPane/List View -->
-         <ScrollPane fx:id="invoiceScrollPane" fitToWidth="true" fitToHeight="true">
+         <!-- Item View (existing) -->
+         <ScrollPane fx:id="itemViewPane" fitToWidth="true" prefHeight="400.0">
             <content>
-               <VBox fx:id="invoiceListContainer" spacing="10.0" prefWidth="580.0" style="-fx-padding: 10;">
-                  <!-- Dynamically loaded invoice items -->
-               </VBox>
+               <VBox fx:id="invoiceListContainer" spacing="10.0" style="-fx-padding: 10;"/>
             </content>
          </ScrollPane>
 
-         <!-- New TableView (initially hidden) -->
-         <TableView fx:id="invoiceTableView" visible="false">
+         <!-- Table View (new) -->
+         <TableView fx:id="invoiceTableView" visible="false" prefHeight="400.0">
             <columns>
-               <TableColumn fx:id="invoiceIdColumn" text="Invoice ID"/>
-               <TableColumn fx:id="vendorColumn" text="Vendor"/>
-               <TableColumn fx:id="subtotalColumn" text="Subtotal"/>
-               <TableColumn fx:id="taxColumn" text="Tax"/>
-               <TableColumn fx:id="totalColumn" text="Total"/>
-               <TableColumn fx:id="statusColumn" text="Status"/>
+               <TableColumn fx:id="selectColumn" text="Select" prefWidth="50"/>
+               <TableColumn fx:id="invoiceIdColumn" text="Invoice ID" prefWidth="80"/>
+               <TableColumn fx:id="vendorColumn" text="Vendor" prefWidth="150"/>
+               <TableColumn fx:id="subtotalColumn" text="Subtotal" prefWidth="80"/>
+               <TableColumn fx:id="taxColumn" text="Tax" prefWidth="70"/>
+               <TableColumn fx:id="totalColumn" text="Total" prefWidth="80"/>
+               <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
             </columns>
          </TableView>
       </StackPane>

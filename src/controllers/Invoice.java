@@ -1,5 +1,8 @@
 package controllers;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public class Invoice {
     private final String internalId;
     private final String invoiceNumber;
@@ -14,6 +17,7 @@ public class Invoice {
     private final String datePaid;
     private final String status;
     private final String description;
+    private final BooleanProperty selected; // Track selection
 
     public Invoice(String internalId, String invoiceNumber, String company, double subtotal, double tax, double totalAmount,
                    String glAccount, String email, String issueDate, String dueDate, String datePaid, String status, String description) {
@@ -30,6 +34,7 @@ public class Invoice {
         this.datePaid = datePaid;
         this.status = status;
         this.description = description;
+        this.selected= new SimpleBooleanProperty(false);
     }
 
     public String getInternalId() { return internalId; }
@@ -45,4 +50,9 @@ public class Invoice {
     public String getDatePaid() { return datePaid; }
     public String getStatus() { return status; }
     public String getDescription() { return description; }
+
+    // Boolean Property for selection
+    public BooleanProperty selectedProperty() { return selected; }
+    public boolean isSelected() { return selected.get(); }
+    public void setSelected(boolean selected) { this.selected.set(selected); }
 }

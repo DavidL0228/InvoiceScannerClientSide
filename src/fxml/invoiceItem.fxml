@@ -6,10 +6,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="120.0" prefWidth="600.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-color: #E0E0E0;"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceItemController">
+<?import javafx.scene.control.CheckBox?>
+<AnchorPane prefHeight="120.0" prefWidth="600.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-color: #E0E0E0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceItemController">
 
-    <VBox layoutX="10.0" layoutY="10.0" spacing="5.0">
+    <CheckBox fx:id="selectCheckBox" layoutX="10.0" layoutY="50.0" onAction="#handleSelection"/>
+
+    <VBox layoutX="40.0" layoutY="10.0" spacing="5.0">
         <HBox spacing="15.0">
             <Label fx:id="invoiceNumberLabel" style="-fx-font-weight: bold;" text="Invoice #: 12345" />
             <Label fx:id="amountLabel" text="Total: $0.00" />
@@ -21,15 +23,13 @@
         <Label fx:id="senderLabel" text="Sender: Company XYZ" />
         <HBox spacing="5.0">
             <Label style="-fx-font-weight: bold;" text="Status:" />
-            <Label fx:id="statusLabel" style="-fx-font-weight: bold;" text="Awaiting Approval" />
+            <Label fx:id="statusLabel" style="-fx-font-weight: bold;" text="Status: Awaiting Approval" />
             <Label fx:id="paymentDateLabel" text="Paid on: 2024-04-10" visible="false" />
         </HBox>
     </VBox>
 
-    <!-- Buttons for Actions -->
-    <HBox layoutX="450.0" layoutY="40.0" spacing="10.0">
-        <Button fx:id="viewEditButton" text="View/Edit" onAction="#viewEditInvoice" />
-        <Button fx:id="payApproveButton" text="Pay" onAction="#handleInvoiceAction" />
-    </HBox>
+    <Button fx:id="payApproveButton" layoutX="500.0" layoutY="40.0" onAction="#handleInvoiceAction" text="Pay" />
+    <Button fx:id="viewEditButton" layoutX="500.0" layoutY="75.0" onAction="#viewEditInvoice" text="View/Edit" />
 
 </AnchorPane>
+

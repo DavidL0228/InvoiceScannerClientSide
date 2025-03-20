@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -40,7 +41,26 @@ public class invoiceItemController {
     @FXML
     private Button payApproveButton, viewEditButton;
 
+    @FXML
+    private CheckBox selectCheckBox;
+
+    private invoiceListScreenController parentController;
+
     private Invoice currentInvoice;
+
+    public void setParentController(invoiceListScreenController parentController) {
+        this.parentController = parentController;
+    }
+
+    @FXML
+    private void handleSelection(ActionEvent event) {
+        if (selectCheckBox.isSelected()) {
+            currentInvoice.setSelected(true);
+            System.out.println("Invoice " + currentInvoice.getInvoiceNumber() + " selected");
+        } else {
+            currentInvoice.setSelected(false);
+        }
+    }
 
     public void setInvoiceData(Invoice invoice) {
         this.currentInvoice = invoice;
@@ -154,4 +174,6 @@ public class invoiceItemController {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }
