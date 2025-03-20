@@ -19,9 +19,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class invoiceListScreenController {
 
@@ -39,6 +43,12 @@ public class invoiceListScreenController {
 
     @FXML
     private ComboBox<String> statusFilterComboBox;
+
+    @FXML
+    private ComboBox<String> selectionFilterComboBox;
+    @FXML
+
+    private ComboBox<String> vendorSelectionComboBox;
 
     @FXML
     private Button backButton;
@@ -91,6 +101,7 @@ public class invoiceListScreenController {
     @FXML
     private TableColumn<Invoice, String> statusColumn;
 
+    private final ObservableList<Invoice> masterInvoiceList = FXCollections.observableArrayList();
 
     private boolean isTableView = false; // Default view is VBox/List
     private int currentPage = 1;
@@ -106,9 +117,118 @@ public class invoiceListScreenController {
         setupPageSizeOptions();
         setupStatusFilter();
         setupInvoiceTable();
+        setupSelectionDropdown();
         itemViewPane.setVisible(true);
         invoiceTableView.setVisible(false);
         fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+    }
+
+    private void setupSelectionDropdown() {
+        ObservableList<String> selectionOptions = FXCollections.observableArrayList(
+                "Select All", "Select Upcoming Payments", "Select All of Vendor"
+        );
+        selectionFilterComboBox.setItems(selectionOptions);
+
+        // Hide vendor selection by default
+        vendorSelectionComboBox.setVisible(false);
+
+        // Populate vendor dropdown
+        ObservableList<String> vendorList = FXCollections.observableArrayList();
+        for (Invoice invoice : masterInvoiceList) {
+            if (!vendorList.contains(invoice.getCompany())) {
+                vendorList.add(invoice.getCompany());
+            }
+        }
+        vendorSelectionComboBox.setItems(vendorList);
+    }
+
+    @FXML
+    private void handleSelectionFilter(ActionEvent event) throws IOException {
+        String selectedOption = selectionFilterComboBox.getValue();
+
+        if (selectedOption == null) {
+            return; // Do nothing if no selection is made
+        }
+
+        for (Invoice invoice : masterInvoiceList) {
+            invoice.setSelected(false);
+        }
+
+        switch (selectedOption) {
+            case "Select All":
+                //selects all invoices
+                for (Invoice invoice : masterInvoiceList) {
+                    invoice.setSelected(true);
+                }
+                vendorSelectionComboBox.setVisible(false);
+                break;
+            case "Select Upcoming Payments":
+                //selects all upcoming due payments
+                for (Invoice invoice : masterInvoiceList) {
+                    if (isUpcoming(invoice)) {
+                        invoice.setSelected(true);
+                    }
+                }
+                vendorSelectionComboBox.setVisible(false);
+                break;
+            case "Select All of Vendor":
+                populateVendorDropdown();
+                vendorSelectionComboBox.setVisible(true);
+                break;
+        }
+
+        updateInvoiceListView(masterInvoiceList);
+        updateInvoiceTableView(masterInvoiceList);
+
+    }
+
+    private void populateVendorDropdown() {
+        Set<String> vendors = invoiceTableView.getItems().stream()
+                .map(Invoice::getCompany)
+                .collect(Collectors.toSet());
+
+        vendorSelectionComboBox.setItems(FXCollections.observableArrayList(vendors));
+        vendorSelectionComboBox.setValue("Select a Vendor");
+    }
+
+    @FXML
+    private void handleVendorSelection(ActionEvent event) throws IOException {
+        for (Invoice invoice : masterInvoiceList) {
+            invoice.setSelected(false);
+        }
+
+        String selectedVendor = vendorSelectionComboBox.getValue();
+        if (!selectedVendor.equals("Select a Vendor")) {
+            selectVendorInvoices(selectedVendor);
+        }
+
+        updateInvoiceListView(masterInvoiceList);
+        updateInvoiceTableView(masterInvoiceList);
+
+    }
+
+
+    private void selectVendorInvoices(String vendor) {
+        for (Invoice invoice : masterInvoiceList) {
+            if (invoice.getCompany().equalsIgnoreCase(vendor)) {
+                invoice.setSelected(true);
+            }
+        }
+    }
+
+    private boolean isUpcoming(Invoice invoice) {
+        try {
+            // Parse the due date from the invoice
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dueDate = LocalDate.parse(invoice.getDueDate(), formatter);
+            LocalDate today = LocalDate.now();
+
+            // Check if the due date is in the current month and year
+            return dueDate.getYear() == today.getYear() && dueDate.getMonth() == today.getMonth();
+        } catch (Exception e) {
+            System.out.println("Error parsing due date for invoice " + invoice.getInvoiceNumber());
+            return false;
+        }
     }
 
     private void setupInvoiceTable() {
@@ -176,6 +296,16 @@ public class invoiceListScreenController {
         for (Invoice invoice : invoiceTableView.getItems()) {
             invoice.setSelected(false);
         }
+
+        //refresh list from database
+        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+
+        // Reset the drop-down menu so the same option can be selected again
+        selectionFilterComboBox.getSelectionModel().clearSelection();
+        selectionFilterComboBox.setValue(null); // Clear selection
+
+        vendorSelectionComboBox.getSelectionModel().clearSelection();
+        vendorSelectionComboBox.setValue(null); // Clear selection
 
         if (isTableView) {
             toggleViewButton.setText("Switch to List View");
@@ -354,6 +484,8 @@ public class invoiceListScreenController {
                     invoices.add(invoice);
                 }
 
+                masterInvoiceList.setAll(invoices);
+
                 if (responseJson.has("totalPages")) {
                     totalPages = responseJson.get("totalPages").getAsInt();
                 }
@@ -363,8 +495,8 @@ public class invoiceListScreenController {
                 pageLabel.setText("Page " + currentPage + " of " + totalPages);
 
 
-                updateInvoiceListView(invoices);
-                updateInvoiceTableView(invoices);
+                updateInvoiceListView(masterInvoiceList);
+                updateInvoiceTableView(masterInvoiceList);
             } else {
                 System.out.println("No invoices found in response.");
             }
@@ -377,14 +509,22 @@ public class invoiceListScreenController {
     private void updateInvoiceListView(List<Invoice> invoices) throws IOException {
         invoiceListContainer.getChildren().clear();
         for (Invoice invoice : invoices) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
-            Parent invoiceItem = loader.load();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/invoiceItem.fxml"));
+                Parent invoiceItem = loader.load();
 
-            invoiceItemController controller = loader.getController();
-            controller.setInvoiceData(invoice);
-            controller.setParentController(this); // <-- Set reference to this controller
+                invoiceItemController controller = loader.getController();
+                controller.setInvoiceData(invoice);
+                controller.setParentController(this);
 
-            invoiceListContainer.getChildren().add(invoiceItem);
+                if (invoice.isSelected()) {
+                    controller.setCheckBoxSelected(true);
+                }
+
+                invoiceListContainer.getChildren().add(invoiceItem);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

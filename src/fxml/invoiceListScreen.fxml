@@ -1,43 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.invoiceListScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
 
    <top>
       <VBox spacing="5.0" style="-fx-padding: 10;">
          <HBox spacing="10.0" style="-fx-background-color: #BEBEBE; -fx-padding: 5;">
-            <Button fx:id="backButton" text="Back" onAction="#goBack"/>
-            <Button fx:id="toggleViewButton" text="Switch to Table View" onAction="#toggleView"/>
+            <Button fx:id="backButton" onAction="#goBack" text="Back" />
+            <Button fx:id="toggleViewButton" onAction="#toggleView" text="Switch to Table View" />
          </HBox>
 
 
          <!-- Sorting & Page Size UI -->
          <HBox spacing="10.0">
-            <Label text="Sort by:"/>
-            <ComboBox fx:id="sortByComboBox" prefWidth="150.0"/>
-            <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0"/>
+            <Label text="Sort by:" />
+            <ComboBox fx:id="sortByComboBox" prefHeight="25.0" prefWidth="101.0" />
+            <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0" />
             <!-- Align "Print Selected" button to the right -->
-            <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
-               <Button fx:id="printSelectedButton" text="Print Selected" onAction="#printSelectedInvoices"/>
+            <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="294.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <Label text="Select :" />
+               <ComboBox fx:id="selectionFilterComboBox" onAction="#handleSelectionFilter" prefHeight="25.0" prefWidth="85.0" />
+               <ComboBox fx:id="vendorSelectionComboBox" onAction="#handleVendorSelection" prefHeight="25.0" prefWidth="125.0" visible="false" />
+
             </HBox>
+
+
          </HBox>
 
          <!-- Status Filter Selection -->
          <HBox spacing="10.0">
-            <Label text="Filter by Status:"/>
-            <ComboBox fx:id="statusFilterComboBox" prefWidth="200.0"/>
+            <Label text="Filter by Status:" />
+            <ComboBox fx:id="statusFilterComboBox" prefHeight="25.0" prefWidth="174.0" />
          </HBox>
 
          <!-- Page Size Selection -->
          <HBox spacing="10.0">
-            <Label text="Invoices per page:"/>
-            <ComboBox fx:id="pageSizeComboBox" prefWidth="100.0"/>
+            <Label text="Invoices per page:" />
+            <ComboBox fx:id="pageSizeComboBox" prefWidth="100.0" />
          </HBox>
 
       </VBox>
@@ -48,20 +57,20 @@
          <!-- Item View (existing) -->
          <ScrollPane fx:id="itemViewPane" fitToWidth="true" prefHeight="400.0">
             <content>
-               <VBox fx:id="invoiceListContainer" spacing="10.0" style="-fx-padding: 10;"/>
+               <VBox fx:id="invoiceListContainer" spacing="10.0" style="-fx-padding: 10;" />
             </content>
          </ScrollPane>
 
          <!-- Table View (new) -->
-         <TableView fx:id="invoiceTableView" visible="false" prefHeight="400.0">
+         <TableView fx:id="invoiceTableView" prefHeight="400.0" visible="false">
             <columns>
-               <TableColumn fx:id="selectColumn" text="Select" prefWidth="50"/>
-               <TableColumn fx:id="invoiceIdColumn" text="Invoice ID" prefWidth="80"/>
-               <TableColumn fx:id="vendorColumn" text="Vendor" prefWidth="150"/>
-               <TableColumn fx:id="subtotalColumn" text="Subtotal" prefWidth="80"/>
-               <TableColumn fx:id="taxColumn" text="Tax" prefWidth="70"/>
-               <TableColumn fx:id="totalColumn" text="Total" prefWidth="80"/>
-               <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+               <TableColumn fx:id="selectColumn" prefWidth="50" text="Select" />
+               <TableColumn fx:id="invoiceIdColumn" prefWidth="80" text="Invoice ID" />
+               <TableColumn fx:id="vendorColumn" prefWidth="150" text="Vendor" />
+               <TableColumn fx:id="subtotalColumn" prefWidth="80" text="Subtotal" />
+               <TableColumn fx:id="taxColumn" prefWidth="70" text="Tax" />
+               <TableColumn fx:id="totalColumn" prefWidth="80" text="Total" />
+               <TableColumn fx:id="statusColumn" prefWidth="100" text="Status" />
             </columns>
          </TableView>
       </StackPane>
@@ -69,10 +78,10 @@
 
    <!-- Pagination Controls -->
    <bottom>
-      <HBox spacing="10.0" alignment="CENTER" style="-fx-padding: 10;">
-         <Button fx:id="prevPageButton" text="Previous" onAction="#previousPage"/>
-         <Label fx:id="pageLabel" text="Page 1"/>
-         <Button fx:id="nextPageButton" text="Next" onAction="#nextPage"/>
+      <HBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10;">
+         <Button fx:id="prevPageButton" onAction="#previousPage" text="Previous" />
+         <Label fx:id="pageLabel" text="Page 1" />
+         <Button fx:id="nextPageButton" onAction="#nextPage" text="Next" />
       </HBox>
    </bottom>
 </BorderPane>

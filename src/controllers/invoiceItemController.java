@@ -175,5 +175,8 @@ public class invoiceItemController {
         stage.show();
     }
 
+    public void setCheckBoxSelected(boolean isSelected) {
+        selectCheckBox.setSelected(isSelected);
+    }
 
 }
