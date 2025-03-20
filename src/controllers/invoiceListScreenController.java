@@ -25,7 +25,6 @@ import java.util.Objects;
 
 public class invoiceListScreenController {
 
-    // UI Components
     @FXML
     private VBox invoiceListContainer;
 
@@ -68,15 +67,29 @@ public class invoiceListScreenController {
     @FXML
     private ScrollPane itemViewPane;
 
-    // Table View Components
-    @FXML private TableView<Invoice> invoiceTableView;
-    @FXML private TableColumn<Invoice, Boolean> selectColumn;
-    @FXML private TableColumn<Invoice, String> invoiceIdColumn;
-    @FXML private TableColumn<Invoice, String> vendorColumn;
-    @FXML private TableColumn<Invoice, Double> subtotalColumn;
-    @FXML private TableColumn<Invoice, Double> taxColumn;
-    @FXML private TableColumn<Invoice, Double> totalColumn;
-    @FXML private TableColumn<Invoice, String> statusColumn;
+    @FXML
+    private TableView<Invoice> invoiceTableView;
+
+    @FXML
+    private TableColumn<Invoice, Boolean> selectColumn;
+
+    @FXML
+    private TableColumn<Invoice, String> invoiceIdColumn;
+
+    @FXML
+    private TableColumn<Invoice, String> vendorColumn;
+
+    @FXML
+    private TableColumn<Invoice, Double> subtotalColumn;
+
+    @FXML
+    private TableColumn<Invoice, Double> taxColumn;
+
+    @FXML
+    private TableColumn<Invoice, Double> totalColumn;
+
+    @FXML
+    private TableColumn<Invoice, String> statusColumn;
 
 
     private boolean isTableView = false; // Default view is VBox/List
@@ -87,6 +100,7 @@ public class invoiceListScreenController {
     private String selectedSortOrder = "desc"; // Default descending order
     private String selectedStatusFilter = "Unpaid Invoices"; // Default filter
 
+    // Setup UI components, get data from server
     public void initialize() {
         setupSortingOptions();
         setupPageSizeOptions();
