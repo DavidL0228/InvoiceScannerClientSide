@@ -257,7 +257,11 @@ public class invoiceListScreenController {
     void goBack(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+
+
+        Scene scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.show();
     }
@@ -271,7 +275,11 @@ public class invoiceListScreenController {
             controller.setSelectedInvoices(List.of(invoice)); // Send only the selected invoice
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+
+
+            Scene scene = new Scene(root, width, height);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

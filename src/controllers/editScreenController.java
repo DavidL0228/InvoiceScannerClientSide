@@ -147,12 +147,19 @@ public class editScreenController {
         }
 
          */
-        goBackToInvoiceList(invoiceNumBox.getScene());
+        //goBackToInvoiceList(invoiceNumBox.getScene());
     }
 
-    private void goBackToInvoiceList(Scene scene) throws IOException {
+    private void goBackToInvoiceList(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml")));
-        scene.setRoot(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+
+
+        Scene scene = new Scene(root, width, height);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

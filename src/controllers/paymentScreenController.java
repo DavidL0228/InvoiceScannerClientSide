@@ -119,7 +119,11 @@ public class paymentScreenController {
         Parent root = loader.load();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+
+
+        Scene scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.show();
     }

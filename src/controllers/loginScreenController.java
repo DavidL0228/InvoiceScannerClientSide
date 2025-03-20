@@ -58,7 +58,12 @@ public class loginScreenController {
             // Load the next screen (home screen)
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+
+
+            Scene scene = new Scene(root, width, height);
             stage.setScene(scene);
             stage.show();
         } else {
