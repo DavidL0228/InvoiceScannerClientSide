@@ -22,25 +22,32 @@
 
 
          <!-- Sorting & Page Size UI -->
+         
          <HBox spacing="10.0">
             <Label text="Sort by:" />
             <ComboBox fx:id="sortByComboBox" prefHeight="25.0" prefWidth="101.0" />
             <ComboBox fx:id="sortOrderComboBox" prefWidth="100.0" />
             <!-- Align "Print Selected" button to the right -->
-            <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="294.0" spacing="10.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <Label text="Select :" />
                <ComboBox fx:id="selectionFilterComboBox" onAction="#handleSelectionFilter" prefHeight="25.0" prefWidth="85.0" />
                <ComboBox fx:id="vendorSelectionComboBox" onAction="#handleVendorSelection" prefHeight="25.0" prefWidth="125.0" visible="false" />
-
             </HBox>
 
-
          </HBox>
+
+
 
          <!-- Status Filter Selection -->
          <HBox spacing="10.0">
             <Label text="Filter by Status:" />
             <ComboBox fx:id="statusFilterComboBox" prefHeight="25.0" prefWidth="174.0" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="273.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <Button fx:id="approveAllButton" prefHeight="25.0" prefWidth="78.0" text="Approve All" />
+               <Button fx:id="exportAllButton" onAction="#exportSelectedInvoicesAsCSV" text="Export All" />
+               <Button fx:id="payAllButton" text="Pay All" />
+               <Button disable="true" mnemonicParsing="false" text="Button" visible="false" />
+            </HBox>
          </HBox>
 
          <!-- Page Size Selection -->

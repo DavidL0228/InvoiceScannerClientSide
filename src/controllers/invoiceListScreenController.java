@@ -17,8 +17,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -419,23 +423,42 @@ public class invoiceListScreenController {
         return selectedList;
     }
 
-
-    // Prints selected invoices
     @FXML
-    private void printSelectedInvoices() {
+    private void exportSelectedInvoicesAsCSV() {
         ObservableList<Invoice> selectedInvoices = getSelectedInvoices();
 
         if (selectedInvoices.isEmpty()) {
-            System.out.println("No invoices selected.");
+            System.out.println("No invoices selected to export.");
             return;
         }
 
-        System.out.println("Selected Invoices:");
-        for (Invoice invoice : selectedInvoices) {
-            System.out.println("Invoice ID: " + invoice.getInvoiceNumber() +
-                    " | Vendor: " + invoice.getCompany() +
-                    " | Total: $" + invoice.getTotalAmount() +
-                    " | Status: " + invoice.getStatus());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Invoices CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        fileChooser.setInitialFileName("invoices.csv");
+        File file = fileChooser.showSaveDialog(viewStackPane.getScene().getWindow());
+
+        if (file != null) {
+            try (PrintWriter writer = new PrintWriter(file)) {
+                // Write CSV header
+                writer.println("Invoice Number,Vendor,Subtotal,Tax,Total,Status");
+
+                // Write each selected invoice
+                for (Invoice invoice : selectedInvoices) {
+                    writer.printf("%s,%s,%.2f,%.2f,%.2f,%s%n",
+                            invoice.getInvoiceNumber(),
+                            invoice.getCompany(),
+                            invoice.getSubtotal(),
+                            invoice.getTax(),
+                            invoice.getTotalAmount(),
+                            invoice.getStatus()
+                    );
+                }
+
+                System.out.println("Invoices exported successfully to: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
