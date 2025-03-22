@@ -45,7 +45,7 @@
             <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="273.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <Button fx:id="approveAllButton" prefHeight="25.0" prefWidth="78.0" text="Approve All" />
                <Button fx:id="exportAllButton" onAction="#exportSelectedInvoicesAsCSV" text="Export All" />
-               <Button fx:id="payAllButton" text="Pay All" />
+               <Button fx:id="payAllButton" onAction="#openPaymentScreen" text="Pay All" />
                <Button disable="true" mnemonicParsing="false" text="Button" visible="false" />
             </HBox>
          </HBox>

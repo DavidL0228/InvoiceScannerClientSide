@@ -591,18 +591,24 @@ public class invoiceListScreenController {
         stage.show();
     }
 
-    private void openPaymentScreen(Invoice invoice, ActionEvent event) {
+    @FXML
+    private void openPaymentScreen(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
             Parent root = loader.load();
 
             paymentScreenController controller = loader.getController();
-            controller.setSelectedInvoices(List.of(invoice)); // Send only the selected invoice
+
+            // Filter selected invoices for "awaiting payment"
+            List<Invoice> awaitingPaymentInvoices = getSelectedInvoices().stream()
+                    .filter(invoice -> "awaiting payment".equalsIgnoreCase(invoice.getStatus()))
+                    .toList();
+
+            controller.setSelectedInvoices(awaitingPaymentInvoices);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             double width = stage.getWidth();
             double height = stage.getHeight();
-
 
             Scene scene = new Scene(root, width, height);
             stage.setScene(scene);
@@ -611,4 +617,5 @@ public class invoiceListScreenController {
             e.printStackTrace();
         }
     }
+
 }
