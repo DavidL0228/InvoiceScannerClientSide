@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10.0" style="-fx-border-color: #ccc; -fx-padding: 10; -fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.vendorPaymentContainerController">
+    <!-- Vendor Name -->
+    <Label fx:id="vendorNameLabel" text="Vendor: Vendor Name" style="-fx-font-weight: bold; -fx-font-size: 14;" />
+
+    <!-- Table of Invoices -->
+    <TableView fx:id="invoiceTable" prefHeight="150">
+        <columns>
+            <TableColumn fx:id="invoiceIdColumn" text="Invoice ID" prefWidth="100" />
+            <TableColumn fx:id="subtotalColumn" text="Subtotal" prefWidth="100" />
+            <TableColumn fx:id="taxColumn" text="Tax" prefWidth="80" />
+            <TableColumn fx:id="totalColumn" text="Total" prefWidth="100" />
+        </columns>
+    </TableView>
+
+    <!-- Total and Buttons -->
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Label text="Total for Vendor: $" />
+        <Label fx:id="totalAmountLabel" text="0.00" style="-fx-font-weight: bold;" />
+        <Button fx:id="chequeButton" text="Pay with Cheque" onAction="#payVendorWithCheque" />
+        <Button fx:id="paypalButton" text="Pay with PayPal" onAction="#payVendorWithPaypal" />
+    </HBox>
+</VBox>
