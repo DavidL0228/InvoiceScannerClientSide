@@ -60,9 +60,54 @@ public class paymentScreenController {
         updateTotalAmount();
     }
 
+
+
     public void setSelectedInvoices(List<Invoice> invoices) {
-        selectedInvoices.setAll(invoices);
-        updateTotalAmount();
+        JsonObject requestJson = new JsonObject();
+        requestJson.addProperty("type", "GET_INVOICES_BY_IDS");
+
+        JsonArray idArray = new JsonArray();
+        for (Invoice invoice : invoices) {
+            idArray.add(invoice.getInternalId());
+        }
+
+        JsonObject data = new JsonObject();
+        data.add("invoiceIds", idArray);
+        requestJson.add("data", data);
+
+        try {
+            JsonObject responseJson = client.sendJsonMessage(requestJson);
+            if (responseJson.has("invoices")) {
+                JsonArray jsonArray = responseJson.getAsJsonArray("invoices");
+                ObservableList<Invoice> refreshedInvoices = FXCollections.observableArrayList();
+
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
+                    Invoice invoice = new Invoice(
+                            jsonInvoice.get("internal_id").getAsString(),
+                            jsonInvoice.get("invoice_number").getAsString(),
+                            jsonInvoice.get("company").getAsString(),
+                            jsonInvoice.get("subtotal").getAsDouble(),
+                            jsonInvoice.get("tax").getAsDouble(),
+                            jsonInvoice.get("total").getAsDouble(),
+                            jsonInvoice.get("gl_account").getAsString(),
+                            jsonInvoice.get("email").getAsString(),
+                            jsonInvoice.get("issue_date").getAsString(),
+                            jsonInvoice.get("due_date").getAsString(),
+                            jsonInvoice.get("date_paid").isJsonNull() ? null : jsonInvoice.get("date_paid").getAsString(),
+                            jsonInvoice.get("status").getAsString(),
+                            jsonInvoice.get("description").getAsString()
+                    );
+                    refreshedInvoices.add(invoice);
+                }
+
+                selectedInvoices.setAll(refreshedInvoices);
+                invoiceTable.setItems(selectedInvoices);
+                updateTotalAmount();
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateTotalAmount() {
