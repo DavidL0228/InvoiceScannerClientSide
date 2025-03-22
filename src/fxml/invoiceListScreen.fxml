@@ -46,7 +46,6 @@
                <Button fx:id="approveAllButton" prefHeight="25.0" prefWidth="132.0" text="Approve Selected" />
                <Button fx:id="exportAllButton" onAction="#exportSelectedInvoicesAsCSV" prefHeight="25.0" prefWidth="116.0" text="Export Selected" />
                <Button fx:id="payAllButton" onAction="#openPaymentScreen" prefHeight="25.0" prefWidth="96.0" text="Pay Selected" />
-               <Button disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="0.0" text="Button" visible="false" />
             </HBox>
          </HBox>
 
