@@ -73,7 +73,7 @@ public class chequeGenerator {
         return new float[]{width, height};
     }
 
-    // Example usage
+    // test generation
     public static void main(String[] args) {
         try {
             generateCheque(
