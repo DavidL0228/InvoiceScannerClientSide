@@ -15,8 +15,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class verificationScreenController {
 
@@ -107,7 +107,23 @@ public class verificationScreenController {
                 Scene scene = new Scene(root, width, height);
                 stage.setScene(scene);
                 stage.show();
-            } else {
+            } else if(response.get("status").getAsString().equals("fail")) {
+                System.out.println("Invoice added failed: " + response.get("message").getAsString());
+                Optional<vendorDialog.UserInfo> result = vendorDialog.showVendorDialog(vendorBox.getText());
+                JsonObject data = new JsonObject();
+                data.addProperty("name", vendorDialog.UserInfo.getName());
+                data.addProperty("gl", vendorDialog.UserInfo.getGl());
+                data.addProperty("payment", vendorDialog.UserInfo.getPayment());
+                data.addProperty("address", vendorDialog.UserInfo.getAddress());
+                data.addProperty("email", vendorDialog.UserInfo.getEmail());
+                JsonObject vendorData = new JsonObject();
+                vendorData.addProperty("type","ADD_VENDOR");
+                vendorData.add("data", data);
+                JsonObject r = client.sendJsonMessage(vendorData);
+                System.out.println("response: " + r.toString());
+            }
+
+            else {
                 System.out.println("Error: " + response.get("message").getAsString());
             }
 

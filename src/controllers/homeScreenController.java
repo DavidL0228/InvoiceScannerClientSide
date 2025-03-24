@@ -100,6 +100,7 @@ public class homeScreenController {
         }
         catch(Exception e){
             System.out.println("Error loading page");
+            e.printStackTrace();
         }
     }
 }

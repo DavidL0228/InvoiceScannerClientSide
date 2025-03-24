@@ -84,15 +84,6 @@ public class uploadInvoiceScreenController {
 
         // send file to server
         AtomicReference<JsonObject> data = new AtomicReference<>(new JsonObject());
-        Task<JsonObject> uploadTask = getJsonObjectTask(event, file, data);
-
-        uploadButton.setVisible(false);
-        labels.setText("   Uploading...");
-        progressBar.setVisible(true);
-        new Thread(uploadTask).start();
-    }
-
-    private Task<JsonObject> getJsonObjectTask(ActionEvent event, File file, AtomicReference<JsonObject> data) {
         File finalFile = file;
         Task<JsonObject> uploadTask = new Task<JsonObject>() {
             @Override
@@ -137,7 +128,11 @@ public class uploadInvoiceScreenController {
             alert.setContentText("Error: " + exception.getMessage());
             alert.showAndWait();
         });
-        return uploadTask;
+
+        uploadButton.setVisible(false);
+        labels.setText("   Uploading...");
+        progressBar.setVisible(true);
+        new Thread(uploadTask).start();
     }
 
 }
