@@ -31,7 +31,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <GridPane alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #e4d760; -fx-background-radius: 20;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <GridPane alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #afff4d; -fx-background-radius: 20;" GridPane.columnIndex="2" GridPane.rowIndex="1">
               <columnConstraints>
                   <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" />
