@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +10,19 @@ import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+
 import java.io.IOException;
 import java.util.Objects;
 import com.google.gson.JsonObject;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+
+
+import javax.imageio.ImageIO;
+
 
 public class uploadInvoiceScreenController {
 
@@ -25,7 +33,7 @@ public class uploadInvoiceScreenController {
     private Button uploadButton;
 
     @FXML
-    void goBackToMain(ActionEvent event) throws IOException, InterruptedException {
+    void goBackToMain(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml"))));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         double width = stage.getWidth();
@@ -36,6 +44,8 @@ public class uploadInvoiceScreenController {
         stage.setScene(scene);
         stage.show();
     }
+
+
 
     @FXML
     void uploadNewInvoice(ActionEvent event) throws IOException, InterruptedException {
@@ -52,6 +62,17 @@ public class uploadInvoiceScreenController {
         }
 
         System.out.println("File selected: " + file);
+
+        if (file.getName().endsWith(".pdf")){
+            PDDocument doc = Loader.loadPDF(file);
+            PDFRenderer pdfRenderer = new PDFRenderer(doc);
+            BufferedImage i = pdfRenderer.renderImage(0);
+            String fileName = "resources/tmp/img.png";
+            File file2 = new File(fileName);
+            ImageIO.write(i, "PNG", file2);
+            doc.close();
+            file = new File("resources/tmp/img.png");
+        }
 
         // send file to server
         JsonObject data = client.sendFile(file.getAbsolutePath());
