@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="607.0" prefWidth="814.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.loginScreenController">
+<BorderPane prefHeight="607.0" prefWidth="814.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.signupScreenController">
    <center>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -42,27 +42,36 @@
               <rowConstraints>
                   <RowConstraints />
                 <RowConstraints minHeight="50.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="70.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="70.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="55.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="55.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="55.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="55.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="55.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="55.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="-Infinity" minHeight="70.0" vgrow="SOMETIMES" />
                   <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="usernameField" minWidth="130.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <Label text="Username" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <TextField fx:id="firstNameField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="lastNameField" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <TextField fx:id="emailField" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <TextField fx:id="usernameField" minWidth="130.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <Label text="Username" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <font>
                         <Font size="18.0" />
                      </font></Label>
-                  <PasswordField fx:id="passwordField" minWidth="130.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                  <PasswordField fx:id="passwordField" minWidth="130.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </PasswordField>
-                  <Label text="Password" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <Label text="Password" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <font>
                         <Font size="18.0" />
                      </font></Label>
-                  <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" minWidth="60.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="81.0" style="-fx-background-color: #ffffff; -fx-background-radius: 30;" text="LOGIN" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                  <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                  <Button fx:id="signupButton" alignment="CENTER" contentDisplay="CENTER" minWidth="60.0" mnemonicParsing="false" onAction="#signupButtonPressed" prefHeight="30.0" prefWidth="92.0" style="-fx-background-color: #ffffff; -fx-background-radius: 30;" text="SIGN UP" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="10.0" />
                      </GridPane.margin>
@@ -73,16 +82,36 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIGN UP" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Text>
-                  <Text fx:id="errorText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="ERROR LOGGING IN" visible="false" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                  <Label text="Email" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label text="First Name" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label text="Confirm Password" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Text fx:id="errorText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="ERROR" visible="false" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="TOP">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Text>
+                  <Label text="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -91,12 +120,12 @@
             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="407.0" minWidth="150.0" style="-fx-background-color: #7eceed;" GridPane.rowSpan="2147483647" />
             <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Account?">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Existing user?">
                      <HBox.margin>
                         <Insets top="3.0" />
                      </HBox.margin>
                   </Text>
-                  <Hyperlink fx:id="signupHyperlink" onAction="#signupHyperlinkPressed" text="Sign up.">
+                  <Hyperlink fx:id="loginHyperlink" onAction="#loginHyperlinkPressed" text="LOGIN.">
                      <HBox.margin>
                         <Insets left="3.0" />
                      </HBox.margin>

@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -30,6 +31,9 @@ public class loginScreenController {
 
     @FXML
     private Text errorText;
+
+    @FXML
+    private Hyperlink signupHyperlink;
 
     @FXML
     void login(ActionEvent event) throws IOException, InterruptedException {
@@ -62,7 +66,6 @@ public class loginScreenController {
             double width = stage.getWidth();
             double height = stage.getHeight();
 
-
             Scene scene = new Scene(root, width, height);
             stage.setScene(scene);
             stage.show();
@@ -70,6 +73,22 @@ public class loginScreenController {
             String message = jsonResponse.has("message") ? jsonResponse.get("message").getAsString() : "Unknown error";
             System.out.println("Login failed: " + message);
             errorText.setVisible(true);
+        }
+    }
+
+    @FXML
+    void signupHyperlinkPressed(ActionEvent event) {
+        try {
+            // Load the next screen
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/signupScreen.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch(Exception e){
+            System.out.println("Error loading page");
         }
     }
 }
