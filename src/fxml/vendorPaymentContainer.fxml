@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10.0" style="-fx-border-color: #ccc; -fx-padding: 10; -fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.vendorPaymentContainerController">
+<VBox fx:id="containerVBox" spacing="10.0" style="-fx-border-color: #ccc; -fx-padding: 10; -fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.vendorPaymentContainerController">
     <!-- Vendor Name -->
     <Label fx:id="vendorNameLabel" text="Vendor: Vendor Name" style="-fx-font-weight: bold; -fx-font-size: 14;" />
 
@@ -27,4 +27,10 @@
         <Button fx:id="chequeButton" text="Pay with Cheque" onAction="#payVendorWithCheque" />
         <Button fx:id="paypalButton" text="Pay with PayPal" onAction="#payVendorWithPaypal" />
     </HBox>
+
+    <Label fx:id="confirmationLabel"
+           textFill="green"
+           visible="false"
+           style="-fx-font-weight: bold;"
+    />
 </VBox>

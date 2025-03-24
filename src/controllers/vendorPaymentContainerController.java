@@ -1,13 +1,18 @@
 package controllers;
 
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.io.File;
 import java.util.List;
@@ -40,6 +45,12 @@ public class vendorPaymentContainerController {
 
     @FXML
     private Button paypalButton;
+
+    @FXML
+    private VBox containerVBox;
+
+    @FXML
+    private Label confirmationLabel;
 
     private String selectedPaymentMethod = null;
 
@@ -120,15 +131,46 @@ public class vendorPaymentContainerController {
                         memo,
                         chequeNumber
                 );
+
+                // Notify server to mark invoices as paid
+                JsonObject requestJson = new JsonObject();
+                requestJson.addProperty("type", "MARK_INVOICES_PAID");
+
+                JsonArray invoiceIds = new JsonArray();
+                for (Invoice invoice : invoices) {
+                    invoiceIds.add(invoice.getInternalId());
+                }
+
+                JsonObject data = new JsonObject();
+                data.add("invoiceIds", invoiceIds);
+                requestJson.add("data", data);
+
+                JsonObject response = client.sendJsonMessage(requestJson);
+                System.out.println("Server response: " + response);
+
+                chequeButton.setDisable(true);
+                paypalButton.setDisable(true);
+
+                String message = String.format("Invoice successfully paid to %s for $%.2f", vendorName, totalAmount);
+
+                Platform.runLater(() -> {
+                    containerVBox.getChildren().clear();
+                    confirmationLabel.setText(message);
+                    confirmationLabel.setVisible(true);
+                    containerVBox.getChildren().add(confirmationLabel);
+                });
+
             } else {
                 System.out.println("Cheque generation canceled.");
             }
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        chequeButton.setDisable(true);
-        paypalButton.setDisable(true);
+
 
     }
 
