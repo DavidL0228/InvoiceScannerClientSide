@@ -21,13 +21,33 @@ public class client {
 
     private static final HttpClient clientAddr = HttpClient.newHttpClient();
 
+    private static String sessionToken = null;
+
     public client(){
        //SERVER_URL = "http://127.0.0.1:8081/api";
+    }
+
+    public static void setToken(String token) {
+        sessionToken = token;
+    }
+
+    public static void clearToken() {
+        sessionToken = null;
+    }
+
+    public static String getToken() {
+        return sessionToken;
     }
 
 
     //this method now uses the jsonObject to avoid needing to save files
     public static JsonObject sendJsonMessage(JsonObject jsonMessage) throws IOException, InterruptedException {
+        if (sessionToken != null) {
+            jsonMessage.addProperty("token", sessionToken);
+        }
+
+        System.out.print(jsonMessage.toString());
+
         // Build the request
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(SERVER_URL+"/message"))

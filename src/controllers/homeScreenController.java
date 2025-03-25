@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.JsonObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class homeScreenController {
@@ -57,12 +59,31 @@ public class homeScreenController {
 
     @FXML
     void logoutButtonClicked(ActionEvent event) {
+        try {
+            // Build logout request manually
+            JsonObject request = new JsonObject();
+            request.addProperty("type", "LOGOUT");
 
-        // logout
+            // Attach session token if available
+            JsonObject data = new JsonObject();
+            data.addProperty("token", client.getToken()); // move token into data
+            request.add("data", data);
 
-        // load login screen
+            // Send to server
+            JsonObject response = client.sendJsonMessage(request);
+            System.out.println("Logout response: " + response);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Clear session token from client
+        client.clearToken();
+
+        // Load login screen
         loadScreen(event, "/fxml/loginScreen.fxml");
     }
+
 
     @FXML
     void uploadInvoiceButtonClicked(ActionEvent event) {

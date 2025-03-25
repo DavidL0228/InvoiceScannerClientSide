@@ -59,6 +59,12 @@ public class loginScreenController {
         if (status.equals("success")) {
             System.out.println("Login successful! Redirecting...");
 
+            if (jsonResponse.has("token")) {
+                String token = jsonResponse.get("token").getAsString();
+                client.setToken(token);  // Store it globally
+                System.out.println("Session token: " + token);
+            }
+
             // Load the next screen (home screen)
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
