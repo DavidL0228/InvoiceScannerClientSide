@@ -31,6 +31,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.ceil;
+
 public class invoiceListScreenController {
 
     @FXML
@@ -124,7 +126,7 @@ public class invoiceListScreenController {
         setupSelectionDropdown();
         itemViewPane.setVisible(true);
         invoiceTableView.setVisible(false);
-        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+        fetchInvoicesFromServer();
     }
 
     private void setupSelectionDropdown() {
@@ -302,7 +304,7 @@ public class invoiceListScreenController {
         }
 
         //refresh list from database
-        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+        fetchInvoicesFromServer();
 
         // Reset the drop-down menu so the same option can be selected again
         selectionFilterComboBox.getSelectionModel().clearSelection();
@@ -338,12 +340,12 @@ public class invoiceListScreenController {
         sortByComboBox.setOnAction(event -> {
             updateSortBy();
             currentPage = 1; // Reset to first page
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+            fetchInvoicesFromServer();
         });
         sortOrderComboBox.setOnAction(event -> {
             updateSortOrder();
             currentPage = 1; // Reset to first page
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+            fetchInvoicesFromServer();
 
         });
     }
@@ -357,7 +359,7 @@ public class invoiceListScreenController {
         pageSizeComboBox.setOnAction(event -> {
             pageSize = pageSizeComboBox.getValue();
             currentPage = 1; // Reset to first page
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+            fetchInvoicesFromServer();
         });
     }
 
@@ -372,7 +374,7 @@ public class invoiceListScreenController {
         statusFilterComboBox.setOnAction(event -> {
             selectedStatusFilter = statusFilterComboBox.getValue();
             currentPage = 1; // Reset to first page
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+            fetchInvoicesFromServer();
         });
     }
 
@@ -409,7 +411,7 @@ public class invoiceListScreenController {
     @FXML
     private void applySorting() {
         currentPage = 1;
-        fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+        fetchInvoicesFromServer();
     }
 
 
@@ -462,8 +464,52 @@ public class invoiceListScreenController {
         }
     }
 
+    @FXML
+    public void approveSelected() {
+        ObservableList<Invoice> selectedInvoices = getSelectedInvoices();
 
-    private void fetchInvoicesFromServer(int pageNumber, int pageSize, String sortBy, String sortOrder, String statusFilter) {
+        if (selectedInvoices.isEmpty()) {
+            System.out.println("No invoices selected for approval.");
+            return;
+        }
+
+        // Build JSON array of selected invoice IDs
+        JsonArray invoiceIdsArray = new JsonArray();
+        for (Invoice invoice : selectedInvoices) {
+            invoiceIdsArray.add(invoice.getInternalId());
+        }
+
+        // Build the request JSON
+        JsonObject request = new JsonObject();
+        request.addProperty("type", "APPROVE_INVOICES");
+
+        JsonObject data = new JsonObject();
+        data.add("invoiceIds", invoiceIdsArray);
+
+        request.add("data", data);
+
+        // Send to server
+        try {
+            JsonObject response = client.sendJsonMessage(request);
+
+            if (response.has("status") && response.get("status").getAsString().equalsIgnoreCase("success")) {
+                System.out.println("Invoices approved: " + response.get("message").getAsString());
+            } else {
+                System.out.println("Approval failed: " + response.get("message").getAsString());
+            }
+
+            // Refresh the list
+            fetchInvoicesFromServer();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void fetchInvoicesFromServer() {
+
         try {
             // Create request JSON object
             JsonObject requestJson = new JsonObject();
@@ -471,19 +517,21 @@ public class invoiceListScreenController {
 
             // Create "data" object with pagination & sorting params
             JsonObject data = new JsonObject();
-            data.addProperty("pageNumber", pageNumber);
+            data.addProperty("pageNumber", currentPage);
             data.addProperty("pageSize", pageSize);
-            data.addProperty("sortBy", sortBy);
-            data.addProperty("sortOrder", sortOrder);
-            data.addProperty("statusFilter", statusFilter);
+            data.addProperty("sortBy", selectedSortBy);
+            data.addProperty("sortOrder", selectedSortOrder);
+            data.addProperty("statusFilter", selectedStatusFilter);
             requestJson.add("data", data);
 
             // Send request to server
             JsonObject responseJson = client.sendJsonMessage(requestJson);
 
+            JsonArray jsonArray = responseJson.getAsJsonArray("invoices");
+
             // Ensure the response contains an array of invoices
             if (responseJson.has("invoices")) {
-                JsonArray jsonArray = responseJson.getAsJsonArray("invoices");
+
                 List<Invoice> invoices = new ArrayList<>();
 
                 // Convert JSON to Invoice objects
@@ -565,7 +613,7 @@ public class invoiceListScreenController {
     private void nextPage() {
         if (currentPage < totalPages) {
             currentPage++;
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+            fetchInvoicesFromServer();
         }
     }
 
@@ -573,7 +621,7 @@ public class invoiceListScreenController {
     private void previousPage() {
         if (currentPage > 1) {
             currentPage--;
-            fetchInvoicesFromServer(currentPage, pageSize, selectedSortBy, selectedSortOrder, selectedStatusFilter);
+            fetchInvoicesFromServer();
         }
     }
 

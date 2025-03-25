@@ -43,7 +43,7 @@
             <Label text="Filter by Status:" />
             <ComboBox fx:id="statusFilterComboBox" prefHeight="25.0" prefWidth="174.0" />
             <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="273.0" spacing="10.0" HBox.hgrow="ALWAYS">
-               <Button fx:id="approveAllButton" prefHeight="25.0" prefWidth="132.0" text="Approve Selected" />
+               <Button fx:id="approveAllButton" onAction="#approveSelected" prefHeight="25.0" prefWidth="132.0" text="Approve Selected" />
                <Button fx:id="exportAllButton" onAction="#exportSelectedInvoicesAsCSV" prefHeight="25.0" prefWidth="116.0" text="Export Selected" />
                <Button fx:id="payAllButton" onAction="#openPaymentScreen" prefHeight="25.0" prefWidth="96.0" text="Pay Selected" />
             </HBox>

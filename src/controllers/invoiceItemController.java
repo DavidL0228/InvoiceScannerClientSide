@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -143,15 +144,25 @@ public class invoiceItemController {
     // Handles approval action separately
     private void approveInvoice() {
         JsonObject requestJson = new JsonObject();
-        requestJson.addProperty("type", "APPROVE_INVOICE");
+        requestJson.addProperty("type", "APPROVE_INVOICES");
+
+        JsonArray invoiceIdsArray = new JsonArray();
+        invoiceIdsArray.add(currentInvoice.getInternalId());
 
         JsonObject data = new JsonObject();
-        data.addProperty("internalID", currentInvoice.getInternalId());
+        data.add("invoiceIds", invoiceIdsArray);
         requestJson.add("data", data);
 
         try {
-            JsonObject responseJson = client.sendJsonMessage(requestJson);
-            System.out.println("Server Response: " + responseJson);
+            JsonObject response = client.sendJsonMessage(requestJson);
+
+            if (response.has("status") && response.get("status").getAsString().equalsIgnoreCase("success")) {
+                System.out.println("Invoices approved: " + response.get("message").getAsString());
+            } else {
+                System.out.println("Approval failed: " + response.get("message").getAsString());
+            }
+
+            parentController.fetchInvoicesFromServer();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
