@@ -92,7 +92,7 @@ public class manageUsersScreenController {
     }
 
     @FXML
-    void deleteUserButtonClicked(ActionEvent event) throws IOException, InterruptedException {
+    void deleteUserButtonClicked(ActionEvent event) throws Exception {
 
         if(userTableView.getSelectionModel().isEmpty())
             return;
@@ -100,13 +100,13 @@ public class manageUsersScreenController {
         String selected = userTableView.getSelectionModel().selectedItemProperty().getValue().toString();
 
         Alert alert = new Alert(Alert.AlertType.WARNING, "", ButtonType.CANCEL, ButtonType.YES);
-        alert.setHeaderText("Delete user " + selected + " ?");
+        alert.setHeaderText("Delete user '" + selected + "' ?");
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.CANCEL) //CANCEL selected
             return;
 
-        /*
+
         JsonObject requestJson = new JsonObject();
 
         // Get data from input fields
@@ -114,14 +114,11 @@ public class manageUsersScreenController {
 
         // Adds data in a nested json object
         JsonObject data = new JsonObject();
-        data.addProperty("username", );
-        data.addProperty("password", );
-        data.addProperty("deleteUsr", userTableView.getSelectionModel().selectedItemProperty().getValue().getUsername());
+        data.addProperty("username", userTableView.getSelectionModel().selectedItemProperty().getValue().getUsername());
         requestJson.add("data", data);
 
         // Send JSON to server
-        JsonObject jsonResponse = client.sendJsonMessage(requestJson);
-        String status = jsonResponse.get("status").toString();
+        String status = client.sendJsonMessage(requestJson).toString();
 
         if(status.equals("success")){
             firstNameField.clear();
@@ -129,13 +126,16 @@ public class manageUsersScreenController {
             usernameField.clear();
             emailField.clear();
             userTableView.getSelectionModel().clearSelection();
+
+            setTable();
+
             return;
         }
 
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setHeaderText("ERROR DELETING USER");
         errorAlert.showAndWait();
-         */
+
     }
 
     public void initialize()throws IOException, InterruptedException {
@@ -169,21 +169,28 @@ public class manageUsersScreenController {
 
         // Send JSON to server
         JsonObject jsonResponse = client.sendJsonMessage(requestJson);
-        JsonArray jsonArray = jsonResponse.getAsJsonArray("users");
 
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonUser = jsonArray.get(i).getAsJsonObject();
+        try{
+            jsonResponse.get("error");
 
-            User user = new User(
-                    jsonUser.get("first_name").getAsString(),
-                    jsonUser.get("last_name").getAsString(),
-                    jsonUser.get("username").getAsString(),
-                    jsonUser.get("email").getAsString()
-            );
-            allUsers.add(user);
+        } catch (Exception e) {
+            JsonArray jsonArray = jsonResponse.getAsJsonArray("users");
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonUser = jsonArray.get(i).getAsJsonObject();
+
+                User user = new User(
+                        jsonUser.get("first_name").getAsString(),
+                        jsonUser.get("last_name").getAsString(),
+                        jsonUser.get("username").getAsString(),
+                        jsonUser.get("email").getAsString()
+                );
+                allUsers.add(user);
+            }
+            userTableView.setItems(allUsers);
         }
 
-        userTableView.setItems(allUsers);
+        System.out.println("No users in table.");
     }
 
     void getRoles(){
