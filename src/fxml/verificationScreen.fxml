@@ -1,97 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.verificationScreenController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.verificationScreenController"
+            prefWidth="800" prefHeight="600">
 
     <center>
-        <HBox prefHeight="100.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
-
+        <HBox spacing="10" BorderPane.alignment="CENTER">
             <!-- Left: Image Display -->
-            <StackPane fx:id="imageStackPane" prefHeight="400.0" prefWidth="187.0" style="-fx-background-color: #aaaa;" HBox.hgrow="ALWAYS">
-                <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
+            <StackPane fx:id="imageStackPane" prefWidth="400" style="-fx-background-color: #eeeeee;" HBox.hgrow="ALWAYS">
+                <ImageView fx:id="imageView" preserveRatio="true" StackPane.alignment="CENTER"/>
             </StackPane>
 
-            <!-- Right: Centered Extracted Data -->
-            <StackPane HBox.hgrow="ALWAYS">
-                <VBox alignment="CENTER" spacing="10.0">
-                    <Label text="Extracted Data" />
+            <!-- Right: Scrollable Data Form -->
+            <ScrollPane fitToHeight="true" fitToWidth="true" HBox.hgrow="ALWAYS">
+                <VBox alignment="TOP_CENTER" spacing="15" style="-fx-padding: 20;" maxWidth="450">
+                    <Label text="Invoice Information" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
-                    <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
-                        <content>
-                            <AnchorPane>
-                                <GridPane layoutX="10.0" layoutY="10.0">
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="ALWAYS" />
-                                        <ColumnConstraints hgrow="ALWAYS" />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                        <RowConstraints vgrow="SOMETIMES" />
-                                    </rowConstraints>
-                                    <children>
-                                        <!-- Internal ID (Non-editable) -->
-                                        <Label text="Internal ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                                        <TextField fx:id="internalIdBox" editable="false" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                    <!-- Invoice Fields -->
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
 
-                                        <!-- Existing fields -->
-                                        <Label text="Invoice Number:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                                        <TextField fx:id="invoiceNumBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Invoice Number:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="invoiceNumBox" maxWidth="300" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                        <Label text="Vendor:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                                        <TextField fx:id="vendorBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Issue Date:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="IssueDateBox" maxWidth="300" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                                        <Label text="Email:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                                        <TextField fx:id="emailBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Due Date:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="DueBox" maxWidth="300" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                                        <Label text="GL Account:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-                                        <TextField fx:id="GLBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="Subtotal:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <TextField fx:id="SubTotalBox" maxWidth="300" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                                        <Label text="Issue Date:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-                                        <TextField fx:id="IssueDateBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Tax:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                        <TextField fx:id="taxBox" maxWidth="300" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-                                        <Label text="Due Date:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-                                        <TextField fx:id="DueBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Label text="Total:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                        <TextField fx:id="totalBox" maxWidth="300" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                    </GridPane>
 
-                                        <Label text="Subtotal Due:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
-                                        <TextField fx:id="SubTotalBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                    <!-- Vendor Section -->
+                    <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
+                        <Label text="Vendor Information" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                        <Label text="Vendor:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="vendorDropdown" maxWidth="250" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                                        <Label text="Tax:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
-                                        <TextField fx:id="taxBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-                                        <Label text="Total Due:" GridPane.rowIndex="9" GridPane.columnIndex="0" />
-                                        <TextField fx:id="totalBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                    </children>
-                                </GridPane>
+                        <VBox fx:id="vendorDetailsBox" spacing="10">
+                            <TextField fx:id="vendorNameBox" promptText="Vendor Name" maxWidth="300"/>
+                            <TextField fx:id="vendorEmailBox" promptText="Email" maxWidth="300"/>
+                            <TextField fx:id="vendorAddressBox" promptText="Address" maxWidth="300"/>
+                            <TextField fx:id="vendorGLBox" promptText="Default GL Account" maxWidth="300"/>
+                        </VBox>
+                    </VBox>
 
-                            </AnchorPane>
-                        </content>
-                    </ScrollPane>
-
-                    <!-- Upload Button Below Form -->
-                    <Button fx:id="uploadDataButton" onAction="#uploadData" text="Upload Data" />
+                    <!-- Upload Button -->
+                    <Button fx:id="uploadDataButton" text="Upload Invoice" onAction="#uploadData"/>
                 </VBox>
-            </StackPane>
+            </ScrollPane>
         </HBox>
     </center>
 </BorderPane>
