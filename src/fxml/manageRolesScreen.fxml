@@ -7,38 +7,65 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.manageRolesScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="474.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.manageRolesScreenController">
    <top>
-      <GridPane style="-fx-background-color: #C9C9C9;" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <HBox prefHeight="100.0" style="-fx-background-color: #7eceed;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" text="Back">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="34.0" prefWidth="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Back">
                <cursor>
                   <Cursor fx:constant="HAND" />
-               </cursor></Button>
+               </cursor>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
-      </GridPane>
+      </HBox>
    </top>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" spacing="15.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="260.0" prefWidth="600.0">
+            <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" spacing="15.0">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </VBox.margin>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manage Roles">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="3.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Button fx:id="createNewRoleButton" mnemonicParsing="false" onAction="#createNewRoleButtonClicked" prefHeight="30.0" prefWidth="147.0" style="-fx-background-color: #afff4d; -fx-background-radius: 20;" text="Create New Role">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="editRoleButton" mnemonicParsing="false" onAction="#editRoleButtonClicked" prefHeight="30.0" prefWidth="88.0" style="-fx-background-color: #d3d3d3; -fx-background-radius: 20;" text="Edit Role" visible="false">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Button>
+               </children>
+            </HBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" prefHeight="309.0" prefWidth="590.0">
                <content>
                   <TableView fx:id="roleTableView" prefHeight="200.0" prefWidth="598.0">
                     <columns>
@@ -60,22 +87,10 @@
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </ScrollPane>
-            <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" spacing="15.0">
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </VBox.margin>
-               <children>
-                  <Button fx:id="createNewRoleButton" mnemonicParsing="false" onAction="#createNewRoleButtonClicked" text="Create New Role">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
-                  <Button fx:id="editRoleButton" mnemonicParsing="false" onAction="#editRoleButtonClicked" text="Edit Role" visible="false">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
-               </children>
-            </HBox>
          </children>
+         <padding>
+            <Insets top="15.0" />
+         </padding>
       </VBox>
    </center>
 </BorderPane>
