@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoiceListScreenController">
 
    <top>
       <VBox spacing="5.0" style="-fx-background-color: #cdf2ff;">
@@ -62,12 +62,21 @@
 
 
          <!-- Status Filter Selection -->
-         <HBox spacing="10.0">
+         <HBox maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="1278.0" spacing="10.0" VBox.vgrow="ALWAYS">
             <Label text="Filter by Status:">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
             <ComboBox fx:id="statusFilterComboBox" prefHeight="25.0" prefWidth="174.0" />
+            <HBox alignment="TOP_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="321.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="errorLabel" alignment="TOP_CENTER" prefHeight="17.0" prefWidth="333.0" text="Label" textFill="RED" visible="false" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
             <padding>
                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
             </padding>

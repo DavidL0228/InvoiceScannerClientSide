@@ -156,7 +156,7 @@ public class invoiceItemController {
                 stage.show();
             } else {
                 // Not authorized — show alert
-                parentController.errorLabel.setText("Financial Manager role required");
+                parentController.errorLabel.setText("Financial Manager Role Required");
                 parentController.errorLabel.setVisible(true);
             }
 
@@ -188,7 +188,7 @@ public class invoiceItemController {
                 System.out.println("Invoices approved: " + response.get("message").getAsString());
             } else {
                 System.out.println("Approval failed: " + response.get("message").getAsString());
-                parentController.errorLabel.setText(response.get("message").getAsString());
+                parentController.errorLabel.setText("Approval Manager Role Required");
                 parentController.errorLabel.setVisible(true);
 
             }

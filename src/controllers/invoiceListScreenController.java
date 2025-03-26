@@ -134,7 +134,7 @@ public class invoiceListScreenController {
 
     private void setupSelectionDropdown() {
         ObservableList<String> selectionOptions = FXCollections.observableArrayList(
-                "Select All", "Select Upcoming Payments", "Select All of Vendor"
+                "Select All", "Select All of Vendor"
         );
         selectionFilterComboBox.setItems(selectionOptions);
 
@@ -499,7 +499,7 @@ public class invoiceListScreenController {
                 System.out.println("Invoices approved: " + response.get("message").getAsString());
             } else {
                 System.out.println("Approval failed: " + response.get("message").getAsString());
-                errorLabel.setText(response.get("message").getAsString());
+                errorLabel.setText("Approval Manager Role Required");
                 errorLabel.setVisible(true);
             }
 
@@ -681,7 +681,7 @@ public class invoiceListScreenController {
                 stage.show();
             } else {
                 // Step 3: Show error message if not authorized
-                errorLabel.setText("Financial Manager role required");
+                errorLabel.setText("Financial Manager Role Required");
                 errorLabel.setVisible(true);
             }
 
