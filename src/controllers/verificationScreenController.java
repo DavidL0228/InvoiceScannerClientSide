@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +20,9 @@ import java.io.File;
 import java.util.*;
 
 public class verificationScreenController {
+
+    @FXML
+    private Label errorLabel;
 
     @FXML
     private ImageView imageView;
@@ -179,6 +183,7 @@ public class verificationScreenController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error loading vendors from server.");
+            printError("Error loading vendors from server.");
         }
     }
 
@@ -188,10 +193,11 @@ public class verificationScreenController {
 
         if(invoiceNumBox.getText().isEmpty() || taxBox.getText().isEmpty()
                 || totalBox.getText().isEmpty() || vendorNameBox.getText().isEmpty()
-                || vendorGLBox.getText().isEmpty() || vendorEmailBox.getText().isEmpty()
+                || vendorGLBox.getText().isEmpty()
                 || IssueDateBox.getText().isEmpty()
                 || DueBox.getText().isEmpty() || SubTotalBox.getText().isEmpty()) {
             System.out.print("Missing Required Field, Please fill out all required fields.");
+            printError("Missing Required Field, Please fill out all required fields.");
             return;
         }
 
@@ -213,6 +219,7 @@ public class verificationScreenController {
                 issueDate.isEmpty() || dueDate.isEmpty() || subTotalStr.isEmpty() ||
                 taxStr.isEmpty() || totalStr.isEmpty()) {
             System.out.print("Missing Required Field, Please fill out all required fields.");
+            printError("Missing Required Field, Please fill out all required fields.");
             return;
         }
 
@@ -224,6 +231,7 @@ public class verificationScreenController {
             total = Double.parseDouble(totalStr);
         } catch (NumberFormatException e) {
             System.out.print("Invalid Number, Subtotal, tax, and total must be valid numbers.");
+            printError("Invalid Number, Subtotal, tax, and total must be valid numbers.");
             return;
         }
 
@@ -298,6 +306,7 @@ public class verificationScreenController {
                 stage.show();
             } else {
                 System.out.println("Invoice error: " + invoiceResponse.get("message").getAsString());
+                printError("Invoice error: " + invoiceResponse.get("message").getAsString());
             }
 
         } catch (Exception e) {
@@ -363,6 +372,11 @@ public class verificationScreenController {
             vendorGLBox.setText(storedGL);
         }
         attemptAutoSelectVendor();
+    }
 
+
+    private void printError(String error){
+        errorLabel.setVisible(true);
+        errorLabel.setText(error);
     }
 }
