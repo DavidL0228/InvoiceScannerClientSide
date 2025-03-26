@@ -117,19 +117,7 @@ public class dataScreenController {
 
         // get year of oldest payment record from server
 
-        JsonObject requestJson = new JsonObject();
-
-        // Get data from input fields
-        requestJson.addProperty("type", "GET_OLDEST_YEAR");  // Specify the message type
-
-        // Adds data in a nested json object
-        JsonObject data = new JsonObject();
-        // and add roles
-        requestJson.add("data", data);
-
-        // Send JSON to server
-        String jsonResponse = client.sendJsonMessage(requestJson).get("date").getAsString();
-        oldestYear = Integer.parseInt(jsonResponse.substring(0,4));
+        oldestYear = getOldestYear();
 
         // add years as menu items
         for(int i=oldestYear; i<=LocalDate.now().getYear(); i++)
@@ -174,6 +162,29 @@ public class dataScreenController {
                 accountMenuSelection = String.valueOf(accountMenuItem.textProperty().getValue());
             });
         }
+    }
+
+
+    private int getOldestYear() {
+        String jsonResponse = null;
+        try {
+            JsonObject requestJson = new JsonObject();
+
+            // Get data from input fields
+            requestJson.addProperty("type", "GET_OLDEST_YEAR");  // Specify the message type
+
+            // Adds data in a nested json object
+            JsonObject data = new JsonObject();
+            // and add roles
+            requestJson.add("data", data);
+
+            // Send JSON to server
+            jsonResponse = client.sendJsonMessage(requestJson).get("date").getAsString();
+            return Integer.parseInt(jsonResponse.substring(0, 4));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 2021;
     }
 
     private void setLineChart(String a, int yr) throws IOException, InterruptedException {
