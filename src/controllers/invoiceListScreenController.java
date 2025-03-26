@@ -36,6 +36,9 @@ import static java.lang.Math.ceil;
 public class invoiceListScreenController {
 
     @FXML
+    public Label errorLabel;
+
+    @FXML
     private VBox invoiceListContainer;
 
     @FXML
@@ -485,7 +488,7 @@ public class invoiceListScreenController {
 
         JsonObject data = new JsonObject();
         data.add("invoiceIds", invoiceIdsArray);
-
+        data.addProperty("token", client.getToken());
         request.add("data", data);
 
         // Send to server
@@ -496,6 +499,8 @@ public class invoiceListScreenController {
                 System.out.println("Invoices approved: " + response.get("message").getAsString());
             } else {
                 System.out.println("Approval failed: " + response.get("message").getAsString());
+                errorLabel.setText(response.get("message").getAsString());
+                errorLabel.setVisible(true);
             }
 
             // Refresh the list

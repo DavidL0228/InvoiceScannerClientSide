@@ -151,6 +151,7 @@ public class invoiceItemController {
 
         JsonObject data = new JsonObject();
         data.add("invoiceIds", invoiceIdsArray);
+        data.addProperty("token", client.getToken());
         requestJson.add("data", data);
 
         try {
@@ -160,6 +161,9 @@ public class invoiceItemController {
                 System.out.println("Invoices approved: " + response.get("message").getAsString());
             } else {
                 System.out.println("Approval failed: " + response.get("message").getAsString());
+                parentController.errorLabel.setText(response.get("message").getAsString());
+                parentController.errorLabel.setVisible(true);
+
             }
 
             parentController.fetchInvoicesFromServer();
