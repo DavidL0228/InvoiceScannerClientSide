@@ -538,19 +538,19 @@ public class invoiceListScreenController {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JsonObject jsonInvoice = jsonArray.get(i).getAsJsonObject();
                     Invoice invoice = new Invoice(
-                            jsonInvoice.get("internal_id").getAsString(),
-                            jsonInvoice.get("invoice_number").getAsString(),
-                            jsonInvoice.get("company").getAsString(),
-                            jsonInvoice.get("subtotal").getAsDouble(),
-                            jsonInvoice.get("tax").getAsDouble(),
-                            jsonInvoice.get("total").getAsDouble(),
-                            jsonInvoice.get("gl_account").getAsString(),
-                            jsonInvoice.get("email").getAsString(),
-                            jsonInvoice.get("issue_date").getAsString(),
-                            jsonInvoice.get("due_date").getAsString(),
-                            jsonInvoice.get("date_paid").isJsonNull() ? null : jsonInvoice.get("date_paid").getAsString(),
-                            jsonInvoice.get("status").getAsString(),
-                            jsonInvoice.get("description").getAsString()
+                            jsonInvoice.get("internal_id").isJsonNull() ? "not found" : jsonInvoice.get("internal_id").getAsString(),
+                            jsonInvoice.get("invoice_number").isJsonNull() ? "not found" : jsonInvoice.get("invoice_number").getAsString(),
+                            jsonInvoice.get("company").isJsonNull() ? "not found" : jsonInvoice.get("company").getAsString(),
+                            jsonInvoice.get("subtotal").isJsonNull() ? -1 : jsonInvoice.get("subtotal").getAsDouble(),
+                            jsonInvoice.get("tax").isJsonNull() ? -1 : jsonInvoice.get("subtotal").getAsDouble(),
+                            jsonInvoice.get("total").isJsonNull() ? -1 : jsonInvoice.get("subtotal").getAsDouble(),
+                            jsonInvoice.get("gl_account").isJsonNull() ? "not found" : jsonInvoice.get("gl_account").getAsString(),
+                            jsonInvoice.get("email").isJsonNull() ? "not found" : jsonInvoice.get("email").getAsString(),
+                            jsonInvoice.get("issue_date").isJsonNull() ? "not found" : jsonInvoice.get("issue_date").getAsString(),
+                            jsonInvoice.get("due_date").isJsonNull() ? "not found" : jsonInvoice.get("due_date").getAsString(),
+                            jsonInvoice.get("date_paid").isJsonNull() ? "not found" : jsonInvoice.get("date_paid").getAsString(),
+                            jsonInvoice.get("status").isJsonNull() ? "not found" : jsonInvoice.get("status").getAsString(),
+                            jsonInvoice.get("description").isJsonNull() ? "not found" : jsonInvoice.get("description").getAsString()
                     );
                     invoices.add(invoice);
                 }
