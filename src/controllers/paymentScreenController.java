@@ -92,7 +92,7 @@ public class paymentScreenController {
                 Parent vendorBox = loader.load();
 
                 vendorPaymentContainerController controller = loader.getController();
-                controller.setVendorInvoices(entry.getKey(), entry.getValue());
+                controller.setVendorInvoices(Integer.parseInt(entry.getKey()), entry.getValue());
 
                 vendorPaymentContainer.getChildren().add(vendorBox);
             } catch (IOException e) {

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class vendorPaymentContainerController {
@@ -70,12 +71,21 @@ public class vendorPaymentContainerController {
         //.setOnAction(e -> handlePaymentSelection("PayPal"));
     }
 
-    public void setVendorInvoices(String vendor, List<Invoice> invoices) {
-        this.vendorName = vendor;
-        vendorNameLabel.setText(vendor);
-        vendorInvoices.setAll(invoices);
+    public void setVendorInvoices(int vendorId, List<Invoice> invoices) {
+        this.vendorInvoices.setAll(invoices);
+
+        vendor vendorObj = fetchVendorById(vendorId);
+        if (vendorObj != null) {
+            this.vendorName = vendorObj.getName();  // Used for payment logic and labels
+            vendorNameLabel.setText(vendorObj.getName());
+        } else {
+            this.vendorName = "Unknown Vendor";
+            vendorNameLabel.setText("Unknown Vendor");
+        }
+
         updateTotalLabel();
     }
+
 
     private void updateTotalLabel() {
         this.totalAmount = vendorInvoices.stream()
@@ -102,7 +112,7 @@ public class vendorPaymentContainerController {
             }
 
             // Total amount calculation
-            double totalAmount = invoices.stream().mapToDouble(Invoice::getTotalAmount).sum();
+            //double totalAmount = invoices.stream().mapToDouble(Invoice::getTotalAmount).sum();
             String amountNumber = String.format("$%.2f", totalAmount);
             String amountText = String.format("%.2f dollars", totalAmount); // Convert total amount to string
             String payeeName = invoices.get(0).getCompany(); // get vendor name from first vendor
@@ -148,18 +158,7 @@ public class vendorPaymentContainerController {
                 JsonObject response = client.sendJsonMessage(requestJson);
                 System.out.println("Server response: " + response);
 
-                chequeButton.setDisable(true);
-                paypalButton.setDisable(true);
-
-                String message = String.format("Invoice successfully paid to %s for $%.2f", vendorName, totalAmount);
-
-                Platform.runLater(() -> {
-                    containerVBox.getChildren().clear();
-                    confirmationLabel.setText(message);
-                    confirmationLabel.setVisible(true);
-                    containerVBox.getChildren().add(confirmationLabel);
-                });
-
+                showSuccessMessage();
             } else {
                 System.out.println("Cheque generation canceled.");
             }
@@ -176,7 +175,121 @@ public class vendorPaymentContainerController {
 
 
     @FXML
-    private void payVendorWithPaypal() {}
+    private void payVendorWithPaypal() {
+        if (vendorInvoices.isEmpty()) {
+            System.out.println("No invoices to pay.");
+            return;
+        }
+
+        JsonObject requestJson = new JsonObject();
+        requestJson.addProperty("type", "PAY_WITH_PAYPAL");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("vendor", vendorName);
+
+        JsonArray invoiceIds = new JsonArray();
+        for (Invoice invoice : vendorInvoices) {
+            invoiceIds.add(invoice.getInternalId());
+        }
+        data.add("invoiceIds", invoiceIds);
+
+        requestJson.add("data", data);
+
+        try {
+            JsonObject response = client.sendJsonMessage(requestJson);
+            System.out.println("PayPal payment response: " + response);
+
+            if (response.has("status") && response.get("status").getAsString().equalsIgnoreCase("success")) {
+                System.out.println("Payment succeeded.");
+
+                // Handle receipt
+                if (response.has("receiptData") && response.has("receiptFilename")) {
+                    String base64Receipt = response.get("receiptData").getAsString();
+                    String receiptFilename = response.get("receiptFilename").getAsString();
+
+                    saveReceiptToFile(base64Receipt, receiptFilename);
+                }
+
+                showSuccessMessage();
+            } else {
+                System.out.println("Payment failed or returned unexpected response.");
+            }
+
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveReceiptToFile(String base64Data, String suggestedFileName) {
+        try {
+            byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64Data);
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Payment Receipt");
+            fileChooser.setInitialFileName(suggestedFileName);
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+            File saveFile = fileChooser.showSaveDialog(paypalButton.getScene().getWindow());
+
+            if (saveFile != null) {
+                java.nio.file.Files.write(saveFile.toPath(), decodedBytes);
+                System.out.println("Receipt saved to: " + saveFile.getAbsolutePath());
+            } else {
+                System.out.println("Receipt save cancelled.");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Failed to save receipt: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private vendor fetchVendorById(int vendorId) {
+        JsonObject request = new JsonObject();
+        request.addProperty("type", "GET_VENDOR_BY_ID");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("vendor_id", vendorId);
+        request.add("data", data);
+
+        try {
+            JsonObject response = client.sendJsonMessage(request);
+
+            if (response.has("status") && response.get("status").getAsString().equalsIgnoreCase("success")) {
+                JsonObject v = response.getAsJsonObject("vendor");
+                return new vendor(
+                        v.get("id").getAsInt(),
+                        v.get("name").getAsString(),
+                        v.get("email").getAsString(),
+                        v.get("address").getAsString(),
+                        v.get("defaultGL").getAsString()
+                );
+            } else {
+                System.out.println("Failed to fetch vendor: " + response.get("message").getAsString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public void showSuccessMessage(){
+        chequeButton.setDisable(true);
+        paypalButton.setDisable(true);
+
+        String message = String.format("Invoice successfully paid to %s for $%.2f", vendorName, totalAmount);
+
+        Platform.runLater(() -> {
+            containerVBox.getChildren().clear();
+            confirmationLabel.setText(message);
+            confirmationLabel.setVisible(true);
+            containerVBox.getChildren().add(confirmationLabel);
+        });
+    }
 
     public String getSelectedPaymentMethod() {
         return selectedPaymentMethod;
