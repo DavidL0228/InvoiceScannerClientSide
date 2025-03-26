@@ -1,7 +1,8 @@
 package controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,21 +11,39 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Objects;
+import java.util.*;
 
 public class dataScreenController {
 
     @FXML
-    private LineChart<Number, Number> allTimeLineChart;
+    private SplitMenuButton accountMenu;
 
     @FXML
-    private Tab allTimeTab;
+    private TableColumn<Map, Integer> actualColumn;
+
+    @FXML
+    private TableColumn<Map, Integer> budgetColumn;
+
+    @FXML
+    private TableView<Object> budgetTableView;
+
+    @FXML
+    private TableView<Object> actualsTableView;
+
+    @FXML
+    private TableColumn<Map, Integer> amountColumn;
+
+    @FXML
+    private TableColumn<Map, String> monthColumn;
 
     @FXML
     private Button applyButton;
@@ -33,82 +52,46 @@ public class dataScreenController {
     private Button backButton;
 
     @FXML
-    private Button currentMonthButton;
+    private TableColumn<Map, String> dateColumn;
 
     @FXML
-    private Button currentYearButton;
+    private LineChart<String, Integer> lineChart;
 
     @FXML
-    private LineChart<String, Number> monthLineChart;
+    private Text monthYearText;
 
     @FXML
-    private SplitMenuButton monthMenu;
+    private Text monthYearText2;
 
     @FXML
-    private Tab monthTab;
-
-    @FXML
-    private Text monthlySpendingText;
-
-    @FXML
-    private Button nextMonthButton;
-
-    @FXML
-    private Button nextYearButton;
-
-    @FXML
-    private Button previousMonthButton;
-
-    @FXML
-    private Button previousYearButton;
-
-    @FXML
-    private TabPane tabPane;
-
-    @FXML
-    private LineChart<Number, Number> yearLineChart;
+    private TableColumn<Map, String> vendorColumn;
 
     @FXML
     private SplitMenuButton yearMenu;
 
-    @FXML
-    private Tab yearTab;
-
-    @FXML
-    private Text yearText;
-
-    @FXML
-    private Text yearlySpendingText;
-
-    private String month;
-    private String monthMenuSelection;
-
     private int year;
     private int yearMenuSelection;
 
-    private String selectedTab = "Month";
+    private String account;
+    private String accountMenuSelection;
 
     private int oldestYear;
 
+    ArrayList<String> months = new ArrayList<>(Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
+    ArrayList<Integer> monthTotals = new ArrayList<>();
+
+    ArrayList<Integer> budgets = new ArrayList<>(Arrays.asList(400, 300, 400, 500, 700, 450, 600, 380, 200, 480, 690, 530));
+
     @FXML
-    void applyButtonClicked(ActionEvent event) {
+    void applyButtonClicked(ActionEvent event) throws IOException, InterruptedException {
 
-        if(yearMenu.textProperty().get().equals("Year"))
+        if(accountMenu.textProperty().get().equals("Account") || yearMenu.textProperty().get().equals("Year"))
             return;
 
-        if(selectedTab.equals("Month")) {
-            if(monthMenu.textProperty().get().equals("Month"))
-                return;
-            setMonthLineChart(yearMenuSelection, monthMenuSelection);
+        if(!Objects.equals(accountMenuSelection, account) || yearMenuSelection!=year) {
+            setLineChart(accountMenuSelection, yearMenuSelection);
+            setMonthInfo(accountMenuSelection, yearMenuSelection);
         }
-        else if(selectedTab.equals("Year"))
-            setYearLineChart(yearMenuSelection);
-
-        if(yearText.toString().equals(String.valueOf(yearMenuSelection)))
-            return;
-
-
-        // get average monthly spending for the selected year
     }
 
     @FXML
@@ -126,78 +109,26 @@ public class dataScreenController {
         }
     }
 
-    @FXML
-    void currentMonthButtonClicked(ActionEvent event) {
-        setMonthLineChart(LocalDate.now().getYear(), LocalDate.now().getMonth().toString());
-    }
-
-    @FXML
-    void currentYearButtonClicked(ActionEvent event) {
-        setYearLineChart(LocalDate.now().getYear());
-    }
-
-    @FXML
-    void nextMonthButtonClicked(ActionEvent event) {
-        month = String.valueOf(Month.valueOf(month).plus(1));
-        if(month.equals("JANUARY"))
-            year++;
-        setMonthLineChart(year, month);
-    }
-
-    @FXML
-    void nextYearButtonClicked(ActionEvent event) {
-        year++;
-        setYearLineChart(year);
-    }
-
-    @FXML
-    void previousMonthButtonClicked(ActionEvent event) {
-        month = String.valueOf(Month.valueOf(month).minus(1));
-        if(month.equals("DECEMBER"))
-            year--;
-        setMonthLineChart(year, month);
-    }
-
-    @FXML
-    void previousYearButtonClicked(ActionEvent event) {
-        year--;
-        setYearLineChart(year);
-    }
-
-    public void initialize(){
-
-        // get current month and year as default values
-        month = LocalDate.now().getMonth().toString();
-        year = LocalDate.now().getYear();
-        monthMenuSelection = month;
-        yearMenuSelection = year;
-
-        // create listener for selected tab
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            selectedTab = newValue.getText();
-            switch (selectedTab) {
-                case "Month" -> monthMenu.setDisable(false);
-                case "Year", "All Time" -> monthMenu.setDisable(true);
-            }
-        });
-
-        ObservableList<MenuItem> monthMenuItems = monthMenu.getItems();
-
-        // create listeners for menu items to obtain selected value
-        for(MenuItem monthMenuItem : monthMenuItems){
-            monthMenuItem.setOnAction((e)->{
-                monthMenu.textProperty().set(monthMenuItem.textProperty().getValue());
-                monthMenuSelection = monthMenuItem.textProperty().getValue();
-            });
-        }
-
+    public void initialize() throws IOException, InterruptedException {
 
         // get year of oldest payment record from server
 
-        oldestYear = 2021; // for testing purposes only
+        JsonObject requestJson = new JsonObject();
+
+        // Get data from input fields
+        requestJson.addProperty("type", "GET_OLDEST_YEAR");  // Specify the message type
+
+        // Adds data in a nested json object
+        JsonObject data = new JsonObject();
+        // and add roles
+        requestJson.add("data", data);
+
+        // Send JSON to server
+        String jsonResponse = client.sendJsonMessage(requestJson).get("date").getAsString();
+        oldestYear = Integer.parseInt(jsonResponse.substring(0,4));
 
         // add years as menu items
-        for(int i=oldestYear; i<=year; i++)
+        for(int i=oldestYear; i<=LocalDate.now().getYear(); i++)
             yearMenu.getItems().add(new MenuItem(String.valueOf(i)));
 
         ObservableList<MenuItem> yearMenuItems = yearMenu.getItems();
@@ -210,42 +141,179 @@ public class dataScreenController {
             });
         }
 
+        // get gl accounts from server
+
+        JsonObject requestJson2 = new JsonObject();
+
+        // Get data from input fields
+        requestJson2.addProperty("type", "GET_GL_ACCOUNTS");  // Specify the message type
+
+        // Adds data in a nested json object
+        JsonObject data2 = new JsonObject();
+        // and add roles
+        requestJson2.add("data", data2);
+
+        // Send JSON to server
+        JsonArray jsonGL = client.sendJsonMessage(requestJson2).get("gl_accounts").getAsJsonArray();
+
+        for(int i=0; i< jsonGL.size(); i++){
+            accountMenu.getItems().add(new MenuItem(jsonGL.get(i).getAsString()));
+        }
+
+        ObservableList<MenuItem> accountMenuItems = accountMenu.getItems();
+        accountMenuSelection = String.valueOf(accountMenuItems.get(0));
+
+        // create listeners for menu items to obtain selected value
+        for(MenuItem accountMenuItem : accountMenuItems){
+            accountMenuItem.setOnAction((e)->{
+                accountMenu.textProperty().set(accountMenuItem.textProperty().getValue());
+                accountMenuSelection = String.valueOf(accountMenuItem.textProperty().getValue());
+            });
+        }
     }
 
-    private void setMonthLineChart(int yr, String m){
+    private void setLineChart(String a, int yr) throws IOException, InterruptedException {
 
+        lineChart.getData().clear();
+
+        // get amount for month of year
+
+        JsonObject requestJson = new JsonObject();
+
+        // Get data from input fields
+        requestJson.addProperty("type", "GET_PAYMENT_AMOUNT_PER_MONTH");  // Specify the message type
+
+        // Adds data in a nested json object
+        JsonObject data = new JsonObject();
+        data.addProperty("account", a);
+        data.addProperty("year", yr);
+        requestJson.add("data", data);
+
+        // Send JSON to server
+        JsonObject jsonResponse = client.sendJsonMessage(requestJson);
+
+        try{
+            JsonArray jsonArray = jsonResponse.getAsJsonArray("data");
+            jsonArray.size();
+        } catch (Exception e) {
+            System.out.println("No data.");
+            return;
+        }
+
+        ArrayList<Integer> actuals = new ArrayList<>(Arrays.asList(
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ));
+
+        JsonArray jsonArray = jsonResponse.getAsJsonArray("data");
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonAmount = jsonArray.get(i).getAsJsonObject();
+            int mnth = jsonAmount.get("month").getAsInt();
+            int amnt = jsonAmount.get("total").getAsInt();
+            System.out.println(mnth+" "+i);
+            actuals.remove(mnth-1);
+            actuals.add(mnth-1, amnt);
+        }
+        System.out.println(actuals);
+        monthTotals = actuals;
+
+        XYChart.Series actualsSeries = new XYChart.Series();
+        actualsSeries.setName("Actuals");
+
+        for(int i=0; i<12; i++) {
+            actualsSeries.getData().add(new XYChart.Data(months.get(i), actuals.get(i)));
+        }
+        lineChart.getData().add(actualsSeries);
+
+
+        // get budget values
+        Collections.shuffle(budgets);
+
+        XYChart.Series budgetsSeries = new XYChart.Series();
+        budgetsSeries.setName("Budget");
+
+        for(int i=0; i<12; i++) {
+            budgetsSeries.getData().add(new XYChart.Data(months.get(i), budgets.get(i)));
+        }
+        lineChart.getData().add(budgetsSeries);
+
+    }
+
+    private void setMonthInfo(String a, int yr) throws IOException, InterruptedException {
+
+        actualsTableView.getItems().clear();
+        budgetTableView.getItems().clear();
+
+        account = a;
         year = yr;
-        month = m;
 
-        monthLineChart.setTitle(m + " " + yr);
+        monthYearText.setText(yr + " - " + a);
+        monthYearText2.setText(yr + " - " + a);
 
-        previousMonthButton.setDisable(yr == oldestYear && m.equals("JANUARY"));
+        // get summary for table
 
-        nextMonthButton.setDisable(yr == LocalDate.now().getYear() && m.equals(LocalDate.now().getMonth().toString()));
+        JsonObject requestJson = new JsonObject();
 
-        // get payment amount for each day of month
+        // Get data from input fields
+        requestJson.addProperty("type", "GET_PAYMENT_SUMMARY");  // Specify the message type
 
-        // set month line chart with values
-    }
+        // Adds data in a nested json object
+        JsonObject data = new JsonObject();
+        data.addProperty("account", a);
+        data.addProperty("year", yr);
+        requestJson.add("data", data);
 
-    private void setYearLineChart(int yr){
+        // Send JSON to server
+        JsonObject jsonResponse = client.sendJsonMessage(requestJson);
 
-        yearLineChart.setTitle(String.valueOf(yr));
+        try{
+            JsonArray jsonArray = jsonResponse.getAsJsonArray("data");
+            jsonArray.size();
+        } catch (Exception e) {
+            System.out.println("No data.");
+            return;
+        }
 
-        previousYearButton.setDisable(yr == oldestYear);
+        dateColumn.setCellValueFactory(new MapValueFactory<>("date"));
+        vendorColumn.setCellValueFactory(new MapValueFactory<>("vendor"));
+        amountColumn.setCellValueFactory(new MapValueFactory<>("amount"));
 
-        nextYearButton.setDisable(yr == LocalDate.now().getYear());
+        ObservableList<Map<String, Object>> tableItems = FXCollections.observableArrayList();
 
-        // get payment amount of each month in year
+        JsonArray jsonArray = jsonResponse.getAsJsonArray("data");
 
-        // set year line chart with values
-    }
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonAmount = jsonArray.get(i).getAsJsonObject();
+            Map<String, Object> item = new HashMap<>();
+            item.put("date", jsonAmount.get("date").getAsString());
+            item.put("vendor", jsonAmount.get("vendor").getAsString());
+            item.put("amount", jsonAmount.get("amount").getAsInt());
 
-    private void setAllTimeLineChart(){
+            tableItems.add(item);
+        }
 
-        // get payment amount of each year
+        actualsTableView.getItems().addAll(tableItems);
 
-        // set all-time line chart with values
+
+        //set budget table
+
+        monthColumn.setCellValueFactory(new MapValueFactory<>("month"));
+        budgetColumn.setCellValueFactory(new MapValueFactory<>("budget"));
+        actualColumn.setCellValueFactory(new MapValueFactory<>("actual"));
+
+        ObservableList<Map<String, Object>> tableItems2 = FXCollections.observableArrayList();
+
+        for (int i = 0; i < monthTotals.size(); i++) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("month", months.get(i));
+            item.put("budget", budgets.get(i));
+            item.put("actual", monthTotals.get(i));
+
+            tableItems2.add(item);
+        }
+
+        budgetTableView.getItems().addAll(tableItems2);
+
     }
 
 }

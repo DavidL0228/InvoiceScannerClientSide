@@ -5,24 +5,22 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="1114.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.dataScreenController">
+<BorderPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1114.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.dataScreenController">
    <top>
-      <GridPane style="-fx-background-color: #C9C9C9;" BorderPane.alignment="CENTER">
+      <GridPane maxHeight="-Infinity" prefHeight="100.0" style="-fx-background-color: #7eceed;" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -31,7 +29,10 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" text="Back" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="32.0" prefWidth="65.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20;" text="Back" GridPane.valignment="TOP">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Button>
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -39,169 +40,144 @@
       </GridPane>
    </top>
    <center>
-      <GridPane alignment="CENTER" prefWidth="906.0" BorderPane.alignment="TOP_CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="835.4000244140625" minWidth="10.0" prefWidth="812.2000732421875" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="550.5999755859375" minWidth="10.0" prefWidth="301.7999267578125" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="458.3999877929688" minHeight="349.5999633789063" prefHeight="457.6" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <TabPane fx:id="tabPane" prefWidth="712.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="2">
-              <tabs>
-                <Tab fx:id="monthTab" text="Month">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #C9C9C9;">
-                           <children>
-                              <LineChart fx:id="monthLineChart" animated="false" minWidth="588.0" prefHeight="424.0" prefWidth="808.0" title=" ">
-                                 <xAxis>
-                                    <CategoryAxis animated="false" label="Date" prefWidth="532.0" side="BOTTOM" />
-                                 </xAxis>
-                                 <yAxis>
-                                    <NumberAxis animated="false" label="Amount $" side="LEFT" />
-                                 </yAxis>
-                                 <padding>
-                                    <Insets right="10.0" top="20.0" />
-                                 </padding>
-                              </LineChart>
-                              <Button fx:id="previousMonthButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#previousMonthButtonClicked" text="&lt;" />
-                              <Button fx:id="nextMonthButton" layoutX="48.0" layoutY="14.0" mnemonicParsing="false" onAction="#nextMonthButtonClicked" text="&gt;" />
-                              <Button fx:id="currentMonthButton" layoutX="85.0" layoutY="14.0" mnemonicParsing="false" onAction="#currentMonthButtonClicked" text="Current" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                  <Tab fx:id="yearTab" text="Year">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #C9C9C9;">
-                           <children>
-                              <LineChart fx:id="yearLineChart" animated="false" minWidth="588.0" prefHeight="424.0" prefWidth="808.0" title=" ">
-                                 <xAxis>
-                                    <CategoryAxis animated="false" label="Month" prefWidth="532.0" side="BOTTOM" />
-                                 </xAxis>
-                                 <yAxis>
-                                    <NumberAxis animated="false" label="Amount $" side="LEFT" />
-                                 </yAxis>
-                                 <padding>
-                                    <Insets right="10.0" top="20.0" />
-                                 </padding>
-                              </LineChart>
-                              <Button fx:id="previousYearButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#previousYearButtonClicked" text="&lt;" />
-                              <Button fx:id="nextYearButton" layoutX="48.0" layoutY="14.0" mnemonicParsing="false" onAction="#nextYearButtonClicked" text="&gt;" />
-                              <Button fx:id="currentYearButton" layoutX="85.0" layoutY="14.0" mnemonicParsing="false" onAction="#currentYearButtonClicked" text="Current" />
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab fx:id="allTimeTab" text="All Time">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #C9C9C9;">
-                           <children>
-                              <LineChart fx:id="allTimeLineChart" animated="false" minWidth="588.0" prefHeight="424.0" prefWidth="808.0" title="All Time">
-                                 <xAxis>
-                                    <CategoryAxis animated="false" label="Year" prefWidth="532.0" side="BOTTOM" />
-                                 </xAxis>
-                                 <yAxis>
-                                    <NumberAxis animated="false" label="Amount $" side="LEFT" />
-                                 </yAxis>
-                                 <padding>
-                                    <Insets right="10.0" top="20.0" />
-                                 </padding>
-                              </LineChart>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
-              </tabs>
-               <padding>
-                  <Insets left="8.0" right="8.0" top="8.0" />
-               </padding>
-            </TabPane>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Spending Data">
-               <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <children>
-                  <SplitMenuButton fx:id="monthMenu" mnemonicParsing="false" text="Month">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="JANUARY" />
-                      <MenuItem mnemonicParsing="false" text="FEBRUARY" />
-                        <MenuItem mnemonicParsing="false" text="MARCH" />
-                        <MenuItem mnemonicParsing="false" text="APRIL" />
-                        <MenuItem mnemonicParsing="false" text="MAY" />
-                        <MenuItem mnemonicParsing="false" text="JUNE" />
-                        <MenuItem mnemonicParsing="false" text="JULY" />
-                        <MenuItem mnemonicParsing="false" text="AUGUST" />
-                        <MenuItem mnemonicParsing="false" text="SEPTEMBER" />
-                        <MenuItem mnemonicParsing="false" text="OCTOBER" />
-                        <MenuItem mnemonicParsing="false" text="NOVEMBER" />
-                        <MenuItem mnemonicParsing="false" text="DECEMBER" />
-                    </items>
-                  </SplitMenuButton>
-                  <SplitMenuButton fx:id="yearMenu" mnemonicParsing="false" text="Year">
-                  </SplitMenuButton>
-                  <Button fx:id="applyButton" mnemonicParsing="false" onAction="#applyButtonClicked" text="Apply" />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" top="10.0" />
-               </padding>
-            </HBox>
-            <GridPane style="-fx-background-color: #C9C9C9;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="TOP_CENTER">
+         <content>
+            <GridPane alignment="CENTER" minHeight="-Infinity">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="835.4000244140625" minWidth="10.0" prefWidth="812.2000732421875" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="550.5999755859375" minWidth="10.0" prefWidth="301.7999267578125" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="349.5999633789063" prefHeight="457.6" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="458.3999877929688" minHeight="349.5999633789063" prefHeight="457.6" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Monthly Spending" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" />
-                  <Text fx:id="yearText" strokeType="OUTSIDE" strokeWidth="0.0" text="2025" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Yearly Spending" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                  <Text fx:id="monthlySpendingText" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Budget vs Actuals" GridPane.columnIndex="1">
                      <GridPane.margin>
-                        <Insets right="8.0" />
+                        <Insets left="20.0" />
                      </GridPane.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Per Month" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                     <children>
+                        <Button fx:id="applyButton" mnemonicParsing="false" onAction="#applyButtonClicked" prefHeight="38.0" prefWidth="64.0" style="-fx-background-color: #afff4d; -fx-background-radius: 20;" text="Apply">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <SplitMenuButton fx:id="yearMenu" mnemonicParsing="false" text="Year">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </SplitMenuButton>
+                        <SplitMenuButton fx:id="accountMenu" mnemonicParsing="false" text="Account">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </SplitMenuButton>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <GridPane style="-fx-background-color: #cdf2ff; -fx-background-radius: 15;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Text fx:id="monthYearText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <TableView fx:id="budgetTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2147483647">
+                          <columns>
+                            <TableColumn fx:id="monthColumn" prefWidth="75.0" text="Month" />
+                            <TableColumn fx:id="budgetColumn" prefWidth="75.0" text="Budget" />
+                              <TableColumn fx:id="actualColumn" prefWidth="75.0" text="Actual" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                      <GridPane.margin>
-                        <Insets left="8.0" />
+                        <Insets right="10.0" top="8.0" />
                      </GridPane.margin>
-                  </Text>
-                  <Line endX="100.0" opacity="0.41" startX="-100.0" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                  <Text fx:id="yearlySpendingText" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                  </GridPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <LineChart fx:id="lineChart" layoutX="2.0" layoutY="27.0" prefHeight="455.0" prefWidth="796.0">
+                          <xAxis>
+                            <CategoryAxis label="Month" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis label="Amount $" side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+                  <GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="419.0" prefWidth="1092.0" style="-fx-background-color: #afff4d; -fx-background-radius: 15;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                      <RowConstraints vgrow="SOMETIMES" />
+                      <RowConstraints vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Text fx:id="monthYearText2" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Text>
+                        <TableView fx:id="actualsTableView" prefHeight="343.0" prefWidth="1062.0" GridPane.rowIndex="1">
+                          <columns>
+                            <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
+                            <TableColumn fx:id="vendorColumn" prefWidth="75.0" text="Vendor" />
+                              <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Amount" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <GridPane.margin>
+                              <Insets top="10.0" />
+                           </GridPane.margin>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
                      <GridPane.margin>
-                        <Insets right="8.0" top="10.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
                      </GridPane.margin>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Per Year" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP">
-                     <GridPane.margin>
-                        <Insets left="8.0" top="10.0" />
-                     </GridPane.margin>
-                  </Text>
+                  </GridPane>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets top="20.0" />
                </padding>
-               <GridPane.margin>
-                  <Insets right="10.0" top="8.0" />
-               </GridPane.margin>
             </GridPane>
-         </children>
-      </GridPane>
+         </content>
+      </ScrollPane>
    </center>
 </BorderPane>
