@@ -115,7 +115,7 @@ public class vendorPaymentContainerController {
             //double totalAmount = invoices.stream().mapToDouble(Invoice::getTotalAmount).sum();
             String amountNumber = String.format("$%.2f", totalAmount);
             String amountText = String.format("%.2f dollars", totalAmount); // Convert total amount to string
-            String payeeName = invoices.get(0).getCompany(); // get vendor name from first vendor
+            String payeeName = vendorNameLabel.getText(); // get vendor name from first vendor
             String memo = "Invoice Payment";
             String chequeNumber = String.valueOf(System.currentTimeMillis()); // Use timestamp to generate cheque number(may need diff logic?)
             String date = java.time.LocalDate.now().toString();
