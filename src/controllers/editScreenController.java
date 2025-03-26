@@ -1,14 +1,12 @@
 package controllers;
 
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -16,50 +14,18 @@ import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.Objects;
+import java.util.*;
 
 public class editScreenController {
 
-
-    @FXML
-    private ImageView imageView;
-
-    @FXML
-    private TextField internalIdBox;
-
-    @FXML
-    private TextField invoiceNumBox;
-
-    @FXML
-    private TextField vendorBox;
-
-    @FXML
-    private TextField emailBox;
-
-    @FXML
-    private TextField GLBox;
-
-    @FXML
-    private TextField IssueDateBox;
-
-    @FXML
-    private TextField DueBox;
-
-    @FXML
-    private TextField SubTotalBox;
-
-    @FXML
-    private TextField taxBox;
-
-    @FXML
-    private TextField totalBox;
-
-    @FXML
-    Button submitEditButton;
-
-    @FXML
-    private StackPane imageStackPane;
+    @FXML private Button backButton;
+    @FXML private TextField invoiceNumBox, emailBox, GLBox, IssueDateBox, DueBox, SubTotalBox, taxBox, totalBox;
+    @FXML private TextField vendorNameBox, vendorEmailBox, vendorAddressBox, vendorGLBox;
+    @FXML private TextField internalIdBox;
+    @FXML private ImageView imageView;
+    @FXML private StackPane imageStackPane;
+    @FXML private Button uploadDataButton;
+    @FXML private Label errorLabel;
 
     private Invoice currentInvoice;
 
@@ -67,25 +33,57 @@ public class editScreenController {
     public void initialize() {
         imageView.fitWidthProperty().bind(imageStackPane.widthProperty().subtract(20));
         imageView.fitHeightProperty().bind(imageStackPane.heightProperty().subtract(20));
+        errorLabel.setVisible(false);
     }
 
-    // This method fetches data from server/database instead of OCR
     public void loadInvoiceData(Invoice invoice) {
         this.currentInvoice = invoice;
 
-        internalIdBox.setText(invoice.getInternalId());
         invoiceNumBox.setText(invoice.getInvoiceNumber());
-        vendorBox.setText(invoice.getCompany());
-        emailBox.setText(invoice.getEmail());
-        GLBox.setText(invoice.getGlAccount());
         IssueDateBox.setText(invoice.getIssueDate());
         DueBox.setText(invoice.getDueDate());
         SubTotalBox.setText(String.valueOf(invoice.getSubtotal()));
         taxBox.setText(String.valueOf(invoice.getTax()));
         totalBox.setText(String.valueOf(invoice.getTotalAmount()));
 
-        // Load image from server using internal id
         loadInvoiceImage(invoice.getInternalId());
+        fetchVendorInfo(invoice.getCompany());
+    }
+
+    private void fetchVendorInfo(String vendorNameToMatch) {
+        JsonObject request = new JsonObject();
+        request.addProperty("type", "GET_ALL_VENDORS");
+        request.add("data", new JsonObject());
+
+        try {
+            JsonObject response = client.sendJsonMessage(request);
+            if (response.has("vendors")) {
+                JsonArray vendorsArray = response.getAsJsonArray("vendors");
+
+                for (JsonElement element : vendorsArray) {
+                    JsonObject vendor = element.getAsJsonObject();
+                    String name = vendor.get("name").getAsString();
+
+                    if (name.equalsIgnoreCase(vendorNameToMatch)) {
+                        vendorNameBox.setText(name);
+                        vendorEmailBox.setText(vendor.get("email").getAsString());
+                        vendorAddressBox.setText(vendor.get("address").getAsString());
+                        vendorGLBox.setText(vendor.get("gl").getAsString());
+                        return;
+                    }
+                }
+
+                // If no vendor found
+                vendorNameBox.setText(vendorNameToMatch);
+                vendorEmailBox.setText("Unknown");
+                vendorAddressBox.setText("Unknown");
+                vendorGLBox.setText("Unknown");
+            }
+        } catch (IOException | InterruptedException e) {
+            errorLabel.setText("Failed to load vendor data.");
+            errorLabel.setVisible(true);
+            e.printStackTrace();
+        }
     }
 
     private void loadInvoiceImage(String invoiceId) {
@@ -98,36 +96,33 @@ public class editScreenController {
 
         try {
             JsonObject response = client.sendJsonMessage(request);
-
-            if (response.has("status") && response.get("status").getAsString().equals("success")) {
+            if ("success".equals(response.get("status").getAsString())) {
                 String base64Image = response.get("imageData").getAsString();
                 byte[] imageBytes = Base64.getDecoder().decode(base64Image);
                 Image image = new Image(new ByteArrayInputStream(imageBytes));
                 imageView.setImage(image);
             } else {
-                System.out.println("Failed to load image: " + response.get("message").getAsString());
+                errorLabel.setText("Failed to load invoice image.");
+                errorLabel.setVisible(true);
             }
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            errorLabel.setText("Error loading image.");
+            errorLabel.setVisible(true);
         }
     }
 
     @FXML
-    void uploadData(ActionEvent event) throws IOException {
-        /*
+    void uploadData(ActionEvent event) {
         JsonObject invoiceData = new JsonObject();
-
-        invoiceData.addProperty("invoiceId", currentInvoice.getInternalId());
-        invoiceData.addProperty("invoiceNum", invoiceNumBox.getText());
-        invoiceData.addProperty("vendor", vendorBox.getText());
-        invoiceData.addProperty("email", emailBox.getText());
-        invoiceData.addProperty("GL", GLBox.getText());
-        invoiceData.addProperty("issueDate", IssueDateBox.getText());
-        invoiceData.addProperty("due", DueBox.getText());
-        invoiceData.addProperty("subTotal", SubTotalBox.getText());
+        invoiceData.addProperty("invoice_number", invoiceNumBox.getText());
+        invoiceData.addProperty("issue_date", IssueDateBox.getText());
+        invoiceData.addProperty("due_date", DueBox.getText());
+        invoiceData.addProperty("subtotal", SubTotalBox.getText());
         invoiceData.addProperty("tax", taxBox.getText());
         invoiceData.addProperty("total", totalBox.getText());
+        invoiceData.addProperty("gl_account", GLBox.getText());
+        invoiceData.addProperty("vendor_name", vendorNameBox.getText());
 
         JsonObject request = new JsonObject();
         request.addProperty("type", "UPDATE_INVOICE");
@@ -135,31 +130,23 @@ public class editScreenController {
 
         try {
             JsonObject response = client.sendJsonMessage(request);
-
-            if (response.get("status").getAsString().equals("success")) {
-                System.out.println("Invoice updated successfully.");
-                goBackToInvoiceList(invoiceNumBox.getScene());
+            if ("success".equals(response.get("status").getAsString())) {
+                errorLabel.setVisible(false);
+                goBack(event);
             } else {
-                System.out.println("Failed to update invoice: " + response.get("message").getAsString());
+                errorLabel.setText("Failed to update invoice: " + response.get("message").getAsString());
+                errorLabel.setVisible(true);
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            errorLabel.setText("Communication error during update.");
+            errorLabel.setVisible(true);
         }
-
-         */
-        //goBackToInvoiceList(invoiceNumBox.getScene());
     }
 
-    private void goBackToInvoiceList(ActionEvent event) throws IOException {
+    public void goBack(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/invoiceListScreen.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        double width = stage.getWidth();
-        double height = stage.getHeight();
-
-
-        Scene scene = new Scene(root, width, height);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root, stage.getWidth(), stage.getHeight()));
         stage.show();
     }
-
 }
