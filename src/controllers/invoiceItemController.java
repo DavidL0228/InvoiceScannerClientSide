@@ -107,6 +107,12 @@ public class invoiceItemController {
             payApproveButton.setText("Pay");
         }
 
+        payApproveButton.setStyle(
+                "-fx-background-color: white;" + "-fx-background-radius: 20;" + "-fx-font-weight: bold;"
+        );
+        viewEditButton.setStyle(
+                "-fx-background-color: white;" + "-fx-background-radius: 20;" + "-fx-font-weight: bold;"
+        );
     }
 
 
