@@ -89,4 +89,7 @@
          </VBox>
         </HBox>
     </center>
+   <top>
+      <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBack" text="Back" BorderPane.alignment="TOP_LEFT" />
+   </top>
 </BorderPane>

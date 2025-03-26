@@ -17,9 +17,13 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class verificationScreenController {
+
+    @FXML
+    private Button backButton;
 
     @FXML
     private Label errorLabel;
@@ -378,5 +382,17 @@ public class verificationScreenController {
     private void printError(String error){
         errorLabel.setVisible(true);
         errorLabel.setText(error);
+    }
+
+    public void goBack(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+
+
+        Scene scene = new Scene(root, width, height);
+        stage.setScene(scene);
+        stage.show();
     }
 }
