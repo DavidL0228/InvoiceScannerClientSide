@@ -329,7 +329,7 @@ public class invoiceListScreenController {
     private void setupSortingOptions() {
         // Define sorting criteria
         ObservableList<String> sortByOptions = FXCollections.observableArrayList(
-                "Sender", "Due Date", "Issue Date", "Total Due", "Status", "Payment Date"
+                "Vender", "Due Date", "Issue Date", "Total Due", "Status", "Date Edited"
         );
         sortByComboBox.setItems(sortByOptions);
         sortByComboBox.setValue("Issue Date"); // Default selection
