@@ -13,7 +13,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/loginScreen.fxml")));
 
         Scene scene = new Scene(root); // attach scene graph to scene
-        stage.setTitle("test"); // displayed in window's title bar
+        stage.setTitle("Invoice Processor"); // displayed in window's title bar
         stage.setScene(scene); // attach scene to stage
         stage.show(); // display the stage
     }
