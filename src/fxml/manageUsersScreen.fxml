@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -17,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.manageUsersScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.manageUsersScreenController">
    <top>
       <HBox prefHeight="100.0" style="-fx-background-color: #7eceed;" BorderPane.alignment="CENTER">
          <children>
@@ -127,8 +130,17 @@
                         <TextField fx:id="lastNameField" GridPane.columnIndex="3" />
                         <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="emailField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <ChoiceBox fx:id="roleChoiceBox" prefWidth="150.0" style="-fx-background-color: #ffffff;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Role" GridPane.rowIndex="2">
+                        <ChoiceBox fx:id="roleChoiceBox" prefWidth="150.0" style="-fx-background-color: #ffffff;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <ScrollPane hbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <content>
+                              <ListView fx:id="roleListView" prefHeight="100.0" prefWidth="150.0">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList"/>
+                                 </items>
+                              </ListView>
+                           </content>
+                        </ScrollPane>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Roles" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets right="12.0" />
                            </GridPane.margin>
@@ -151,6 +163,16 @@
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
+                        </Button>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Role" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="addRoleButton" mnemonicParsing="false" onAction="#addNewRole" text="Add Role" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
                         </Button>
                      </children>
                      <HBox.margin>

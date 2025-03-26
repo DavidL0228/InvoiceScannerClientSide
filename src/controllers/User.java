@@ -1,36 +1,52 @@
 package controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.List;
+
 public class User {
     private final String firstname;
     private final String lastname;
     private final String username;
     private final String email;
+    private final ObservableList<String> roles;
 
-    public User(String first, String last, String usr, String em){
-        firstname = first;
-        lastname = last;
-        username = usr;
-        email = em;
+    // Constructor for users with multiple roles
+    public User(String first, String last, String usr, String em, List<String> roleList) {
+        this.firstname = first;
+        this.lastname = last;
+        this.username = usr;
+        this.email = em;
+        this.roles = FXCollections.observableArrayList(roleList);
     }
 
-    public String getFirstname(){
+    public String getFirstname() {
         return firstname;
     }
 
-    public String getLastname(){
+    public String getLastname() {
         return lastname;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
+    public ObservableList<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> newRoles) {
+        roles.setAll(newRoles);
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return firstname + " " + lastname;
     }
 }

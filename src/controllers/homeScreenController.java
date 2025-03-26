@@ -15,6 +15,7 @@ import java.util.Objects;
 
 public class homeScreenController {
 
+    public Button mangeUsersButton;
     @FXML
     private Button addPaymentButton;
 
@@ -123,5 +124,10 @@ public class homeScreenController {
             System.out.println("Error loading page");
             e.printStackTrace();
         }
+    }
+
+    public void manageUsersButtonClicked(ActionEvent event) {
+        // load manage roles screen
+        loadScreen(event, "/fxml/manageUsersScreen.fxml");
     }
 }
