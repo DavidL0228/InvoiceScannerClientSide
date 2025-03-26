@@ -647,28 +647,50 @@ public class invoiceListScreenController {
     @FXML
     private void openPaymentScreen(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
-            Parent root = loader.load();
+            // Step 1: Check if user has financial_manager role
+            JsonObject request = new JsonObject();
+            request.addProperty("type", "CHECK_ROLE");
 
-            paymentScreenController controller = loader.getController();
+            JsonObject data = new JsonObject();
+            data.addProperty("role", "financial_manager");
+            data.addProperty("token", client.getToken());
+            request.add("data", data);
 
-            // Filter selected invoices for "awaiting payment"
-            List<Invoice> awaitingPaymentInvoices = getSelectedInvoices().stream()
-                    .filter(invoice -> "awaiting payment".equalsIgnoreCase(invoice.getStatus()))
-                    .toList();
+            JsonObject response = client.sendJsonMessage(request);
 
-            controller.setSelectedInvoices(awaitingPaymentInvoices);
+            if (response.has("authorized") && response.get("authorized").getAsBoolean()) {
+                // Step 2: Proceed to open payment screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
+                Parent root = loader.load();
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            double width = stage.getWidth();
-            double height = stage.getHeight();
+                paymentScreenController controller = loader.getController();
 
-            Scene scene = new Scene(root, width, height);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+                // Filter selected invoices for "awaiting payment"
+                List<Invoice> awaitingPaymentInvoices = getSelectedInvoices().stream()
+                        .filter(invoice -> "awaiting payment".equalsIgnoreCase(invoice.getStatus()))
+                        .toList();
+
+                controller.setSelectedInvoices(awaitingPaymentInvoices);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                double width = stage.getWidth();
+                double height = stage.getHeight();
+
+                Scene scene = new Scene(root, width, height);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                // Step 3: Show error message if not authorized
+                errorLabel.setText("Financial Manager role required");
+                errorLabel.setVisible(true);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            errorLabel.setText("Failed to verify role or load payment screen.");
+            errorLabel.setVisible(true);
+
         }
     }
+
 
 }

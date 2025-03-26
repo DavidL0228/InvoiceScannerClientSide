@@ -122,24 +122,45 @@ public class invoiceItemController {
     // Opens the payment screen and passes selected invoice
     private void openPaymentScreen(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
-            Parent root = loader.load();
+            // Build JSON request to check role
+            JsonObject request = new JsonObject();
+            request.addProperty("type", "CHECK_ROLE");
 
-            paymentScreenController controller = loader.getController();
-            controller.setSelectedInvoices(List.of(currentInvoice)); // Send only this invoice
+            JsonObject data = new JsonObject();
+            data.addProperty("role", "financial_manager");
+            data.addProperty("token", client.getToken());
+            request.add("data", data);
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            double width = stage.getWidth();
-            double height = stage.getHeight();
+            JsonObject response = client.sendJsonMessage(request);
 
+            if (response.has("authorized") && response.get("authorized").getAsBoolean()) {
+                // Authorized — proceed to open payment screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paymentScreen.fxml"));
+                Parent root = loader.load();
 
-            Scene scene = new Scene(root, width, height);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+                paymentScreenController controller = loader.getController();
+                controller.setSelectedInvoices(List.of(currentInvoice)); // Send only this invoice
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                double width = stage.getWidth();
+                double height = stage.getHeight();
+
+                Scene scene = new Scene(root, width, height);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                // Not authorized — show alert
+                parentController.errorLabel.setText("Financial Manager role required");
+                parentController.errorLabel.setVisible(true);
+            }
+
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            parentController.errorLabel.setText("Failed to verify role or load payment screen.");
+            parentController.errorLabel.setVisible(true);
         }
     }
+
 
     // Handles approval action separately
     private void approveInvoice() {
