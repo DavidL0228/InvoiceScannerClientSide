@@ -144,6 +144,7 @@ public class vendorPaymentContainerController {
 
                 // Notify server to mark invoices as paid
                 JsonObject requestJson = new JsonObject();
+
                 requestJson.addProperty("type", "MARK_INVOICES_PAID");
 
                 JsonArray invoiceIds = new JsonArray();
@@ -153,6 +154,12 @@ public class vendorPaymentContainerController {
 
                 JsonObject data = new JsonObject();
                 data.add("invoiceIds", invoiceIds);
+                data.addProperty("amount", amountNumber);
+                data.addProperty("paymentMethod", "cheque");
+                data.addProperty("vendor", "payeeName");
+                data.addProperty("paymentNumber", chequeNumber);
+
+
                 requestJson.add("data", data);
 
                 JsonObject response = client.sendJsonMessage(requestJson);
