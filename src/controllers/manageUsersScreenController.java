@@ -290,7 +290,12 @@ public class manageUsersScreenController {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+
+
+            Scene scene = new Scene(root, width, height);
+            stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

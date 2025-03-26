@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -36,6 +37,10 @@ public class homeScreenController {
 
     @FXML
     private Button manageRolesButton;
+
+    @FXML
+    private Label errorLabel;
+
 
     @FXML
     void addPaymentButtonClicked(ActionEvent event) {
@@ -100,12 +105,36 @@ public class homeScreenController {
         loadScreen(event, "/fxml/invoiceListScreen.fxml");
     }
 
-    @FXML
-    void manageRolesButtonClicked(ActionEvent event){
 
-        // load manage roles screen
-        loadScreen(event, "/fxml/manageRolesScreen.fxml");
+
+    @FXML
+    void manageUsersButtonClicked(ActionEvent event) {
+        JsonObject request = new JsonObject();
+        request.addProperty("type", "CHECK_ROLE");
+        request.addProperty("token", client.getToken());
+
+        JsonObject data = new JsonObject();
+        data.addProperty("role", "system_admin");  // The role we're checking for
+        request.addProperty("token", client.getToken());
+        request.add("data", data);
+
+        try {
+            JsonObject response = client.sendJsonMessage(request);
+            if (response.has("authorized") && response.get("authorized").getAsBoolean()) {
+                // Hide error if it was shown
+                errorLabel.setVisible(false);
+                loadScreen(event, "/fxml/manageRolesScreen.fxml");
+            } else {
+                errorLabel.setText("ERROR: you are not a system_admin");
+                errorLabel.setVisible(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorLabel.setText("ERROR: Unable to check role.");
+            errorLabel.setVisible(true);
+        }
     }
+
 
     void loadScreen(ActionEvent event, String page){
         try {
@@ -126,8 +155,8 @@ public class homeScreenController {
         }
     }
 
-    public void manageUsersButtonClicked(ActionEvent event) {
+    public void manageRolesButtonClicked(ActionEvent event) {
         // load manage roles screen
-        loadScreen(event, "/fxml/manageUsersScreen.fxml");
+        loadScreen(event, "/fxml/manageRolesScreen.fxml");
     }
 }
