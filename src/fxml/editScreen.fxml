@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -13,8 +14,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.editScreenController">
+<BorderPane prefHeight="458.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.editScreenController">
 
     <center>
         <HBox prefHeight="100.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
@@ -26,15 +28,18 @@
 
             <!-- Right: Centered Extracted Data -->
             <StackPane HBox.hgrow="ALWAYS">
-                <VBox alignment="CENTER" spacing="10.0">
-                    <Label text="Extracted Data" />
+                <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #7eceed;" StackPane.alignment="CENTER">
+                    <Label text="Extracted Data">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font></Label>
 
                     <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                         <content>
-                            <AnchorPane>
-                                <GridPane layoutX="10.0" layoutY="10.0">
+                            <AnchorPane style="-fx-background-color: #cdf2ff;">
+                                <GridPane alignment="CENTER" hgap="10.0" layoutX="23.0" vgap="10.0">
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="ALWAYS" />
+                                        <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" />
                                         <ColumnConstraints hgrow="ALWAYS" />
                                     </columnConstraints>
                                     <rowConstraints>
@@ -51,37 +56,70 @@
                                     </rowConstraints>
                                     <children>
                                         <!-- Internal ID (Non-editable) -->
-                                        <Label text="Internal ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                                        <TextField fx:id="internalIdBox" editable="false" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                                        <Label text="Internal ID:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
+                                        <TextField fx:id="internalIdBox" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                                         <!-- Existing fields -->
-                                        <Label text="Invoice Number:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                        <Label text="Invoice Number:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="invoiceNumBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                        <Label text="Vendor:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                        <Label text="Vendor:" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="vendorBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                                        <Label text="Email:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="emailBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                                        <Label text="GL Account:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                        <Label text="GL Account:" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="GLBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                                        <Label text="Issue Date:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                        <Label text="Issue Date:" GridPane.columnIndex="0" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="IssueDateBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-                                        <Label text="Due Date:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                        <Label text="Due Date:" GridPane.columnIndex="0" GridPane.rowIndex="6">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="DueBox" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-                                        <Label text="Subtotal Due:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                                        <Label text="Subtotal Due:" GridPane.columnIndex="0" GridPane.rowIndex="7">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="SubTotalBox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
-                                        <Label text="Tax:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+                                        <Label text="Tax:" GridPane.columnIndex="0" GridPane.rowIndex="8">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="taxBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-                                        <Label text="Total Due:" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+                                        <Label text="Total Due:" GridPane.columnIndex="0" GridPane.rowIndex="9">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                                         <TextField fx:id="totalBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                                     </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
                                 </GridPane>
 
                             </AnchorPane>
@@ -89,7 +127,13 @@
                     </ScrollPane>
 
                     <!-- Upload Button Below Form -->
-                    <Button fx:id="submitEditButton" onAction="#uploadData" text="Submit Edit" />
+                    <Button fx:id="submitEditButton" onAction="#uploadData" style="-fx-background-color: #e4d760; -fx-background-radius: 20;" text="Submit Edit">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font></Button>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
                 </VBox>
             </StackPane>
         </HBox>
