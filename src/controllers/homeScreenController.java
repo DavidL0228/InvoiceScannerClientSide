@@ -111,11 +111,11 @@ public class homeScreenController {
     void manageUsersButtonClicked(ActionEvent event) {
         JsonObject request = new JsonObject();
         request.addProperty("type", "CHECK_ROLE");
-        request.addProperty("token", client.getToken());
+
 
         JsonObject data = new JsonObject();
         data.addProperty("role", "system_admin");  // The role we're checking for
-        request.addProperty("token", client.getToken());
+        data.addProperty("token", client.getToken());
         request.add("data", data);
 
         try {
@@ -123,7 +123,7 @@ public class homeScreenController {
             if (response.has("authorized") && response.get("authorized").getAsBoolean()) {
                 // Hide error if it was shown
                 errorLabel.setVisible(false);
-                loadScreen(event, "/fxml/manageRolesScreen.fxml");
+                loadScreen(event, "/fxml/manageUsersScreen.fxml");
             } else {
                 errorLabel.setText("ERROR: you are not a system_admin");
                 errorLabel.setVisible(true);
