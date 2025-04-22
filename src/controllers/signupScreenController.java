@@ -108,6 +108,47 @@ public class signupScreenController {
         if (status.equals("success")) {
             System.out.println("Account creation successful! Redirecting...");
 
+            login(event);
+        } else {
+            String message = jsonResponse.has("message") ? jsonResponse.get("message").getAsString() : "Unknown error";
+            System.out.println("Account creation failed: " + message);
+
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please try again.", ButtonType.OK);
+            alert.setHeaderText("ERROR CREATING ACCOUNT");
+            alert.showAndWait();
+        }
+
+    }
+
+    void login(ActionEvent event) throws IOException, InterruptedException {
+        JsonObject jsonObject = new JsonObject();
+
+        // Get data from input fields
+        jsonObject.addProperty("type", "LOGIN");  // Specify the message type
+
+        // Adds data in a nested json object
+        JsonObject data = new JsonObject();
+        data.addProperty("username", usernameField.getText().trim());
+        data.addProperty("password", passwordField.getText().trim());
+
+        jsonObject.add("data", data);
+
+
+        // Send JSON to server
+        JsonObject jsonResponse = client.sendJsonMessage(jsonObject);
+
+        // Extract status field
+        String status = jsonResponse.has("status") ? jsonResponse.get("status").getAsString() : "failure";
+
+        if (status.equals("success")) {
+            System.out.println("Login successful! Redirecting...");
+
+            if (jsonResponse.has("token")) {
+                String token = jsonResponse.get("token").getAsString();
+                client.setToken(token);  // Store it globally
+                System.out.println("Session token: " + token);
+            }
+
             // Load the next screen (home screen)
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/homeScreen.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -120,13 +161,9 @@ public class signupScreenController {
             stage.show();
         } else {
             String message = jsonResponse.has("message") ? jsonResponse.get("message").getAsString() : "Unknown error";
-            System.out.println("Account creation failed: " + message);
-
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Please try again.", ButtonType.OK);
-            alert.setHeaderText("ERROR CREATING ACCOUNT");
-            alert.showAndWait();
+            System.out.println("Login failed: " + message);
+            errorText.setVisible(true);
         }
-
     }
 
     // check all fields for errors, and combine into an error message
