@@ -155,8 +155,4 @@ public class homeScreenController {
         }
     }
 
-    public void manageRolesButtonClicked(ActionEvent event) {
-        // load manage roles screen
-        loadScreen(event, "/fxml/manageRolesScreen.fxml");
-    }
 }

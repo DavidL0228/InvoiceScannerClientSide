@@ -225,7 +225,6 @@ public class dataScreenController {
             JsonObject jsonAmount = jsonArray.get(i).getAsJsonObject();
             int mnth = jsonAmount.get("month").getAsInt();
             int amnt = jsonAmount.get("total").getAsInt();
-            System.out.println(mnth+" "+i);
             actuals.remove(mnth-1);
             actuals.add(mnth-1, amnt);
         }
